@@ -1,0 +1,10 @@
+# Dependencias
+node_modules/
+dist/
+build/
+
+# Variables de entorno (¡Muy importante!)
+.env
+.DS_Store
+.vscode/
+coverage/
