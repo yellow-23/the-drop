@@ -1,13 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
+
+import Navbar from "./Components/Navbar";
+import AppRouter from "./Routes/AppRouter";
 
 function App() {
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="text-center">
-        <h1>the drop</h1>
-      </div>
-    </div>
+    <>
+      <Navbar />
+
+      <main style={{ paddingTop: "56px" }}>
+        <AppRouter />
+      </main>
+    </>
   );
 }
 
