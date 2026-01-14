@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f7f7f7;
+  background: #000;
   padding: 24px;
 }
 
@@ -44,7 +44,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 8px;
-  background: #9900ff;
+  background: #E8374E;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -53,7 +53,7 @@
 }
 
 .auth-button:hover {
-  background: #7f00d4;
+  background: #EC5B6E;
 }
 
 .auth-footer {
@@ -63,7 +63,7 @@
 }
 
 .auth-footer a {
-  color: #9900ff;
+  color: #E8374E;
   text-decoration: none;
   font-weight: 500;
 }
