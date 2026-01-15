@@ -1,4 +1,6 @@
 import "./ProductCard.css";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 function ProductCard({
   image,
@@ -8,6 +10,9 @@ function ProductCard({
   brand,
   price,
 }) {
+
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div className="product-card">
       <div className="product-image">
@@ -34,8 +39,19 @@ function ProductCard({
 
         <p className="product-price">${price}</p>
 
-        <button className="product-btn">
-          DETALLE DEL PRODUCTO
+        <button className="product-btn"
+        onClick={() =>
+          addToCart({
+            id: name + size + brand,
+            image,
+            name,
+            size,
+            gender,
+            brand,
+            price,
+          })
+        }>
+          AGREGAR AL CARRITO
         </button>
       </div>
     </div>
