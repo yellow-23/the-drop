@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
       return { success: false, message: "Usuario ya existe" };
     }
 
-    const newUser = { email, password };
+    const newUser = { email, password, name: "", lastname: "",nickname:"", avatar: "", };
     users.push(newUser);
 
     localStorage.setItem("users", JSON.stringify(users));
@@ -45,8 +45,25 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = (updatedData) => {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+
+  const updatedUsers = users.map((u) =>
+    u.email === user.email ? { ...u, ...updatedData } : u
+  );
+
+  const updatedUser = updatedUsers.find(
+    (u) => u.email === user.email
+  );
+
+  localStorage.setItem("users", JSON.stringify(updatedUsers));
+  localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+  setUser(updatedUser);
+};
+
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

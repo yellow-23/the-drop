@@ -1,15 +1,30 @@
+import { useNavigate } from "react-router-dom";
+import { useFavorites } from "../Context/FavoritesContext";
 import "./ProductCard.css";
 
 function ProductCard({
+  id,
   image,
   name,
   size,
   gender,
   brand,
   price,
-}) {
+} ) {
+  const Navigate = useNavigate();
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(id);
+
   return (
     <div className="product-card">
+      <button
+        className={`favorite-btn ${favorite ? "active" : ""}`}
+        onClick={() =>
+          toggleFavorite({ id, image, name, size, gender, brand, price })
+        }
+      >
+        ♥
+      </button>
       <div className="product-image">
         <img
           src={image || "/images/placeholder-shoe.png"}
@@ -34,10 +49,10 @@ function ProductCard({
 
         <p className="product-price">${price}</p>
 
-        <button className="product-btn">
+      </div>
+      <button className="product-btn" onClick={() => Navigate("/product/${product.id}")}>
           DETALLE DEL PRODUCTO
         </button>
-      </div>
     </div>
   );
 }

@@ -8,7 +8,7 @@ function App() {
     <>
       <Navbar />
 
-      <main style={{ paddingTop: "56px" }}>
+      <main className="app-content">
         <AppRouter />
       </main>
     </>
