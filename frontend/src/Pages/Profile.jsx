@@ -95,6 +95,8 @@ function Profile() {
           {section === "favorites" && (
   <>
     <h3>Mis favoritos</h3>
+    <div className="profile-divider">
+    </div>
 
     {favorites.length === 0 ? (
       <p>No tienes productos en favoritos aún</p>
@@ -109,11 +111,10 @@ function Profile() {
     )}
   </>
 )}
-
-
-          {section === "posts" && (
+       {section === "posts" && (
             <>
               <h3>Mis publicaciones</h3>
+              <div className="profile-divider"></div>
               <div className="row g-3 justify-content-center">
                 {mockProducts.map((p) => (
                   <div key={p.id} className="col-12 col-sm-6 col-lg-4">
@@ -122,12 +123,14 @@ function Profile() {
                 ))}
               </div>
             </>
-          )}
+          )}   
 
           {section === "edit" && (
-           <div className="auth-page">
+           <div className="row justify-content-center">
+            <h3>Editar perfil</h3>
+            <div className="profile-divider"></div>
     <form className="auth-card" onSubmit={handleSubmit}>
-      <h2>Editar perfil</h2>
+      <h2>Actualiza tus datos</h2>
 
       <div className="auth-field">
         <label>Avatar (URL)</label>
@@ -195,7 +198,5 @@ function Profile() {
     </div>
   );
 }
-
-
 
 export default Profile

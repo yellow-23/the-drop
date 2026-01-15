@@ -20,6 +20,7 @@
   height: 200px;
   border-radius: 50%;
   margin: 0 auto 20px auto;
+  background-color: #ccc;
 }
 
 .profile-menu button {
@@ -46,7 +47,7 @@
 }
 
 h3 {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
