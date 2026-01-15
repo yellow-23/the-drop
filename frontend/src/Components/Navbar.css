@@ -1,5 +1,5 @@
 .app-navbar { 
-  background: #6d4a8d;
+  background: #E8374E;
   position: fixed;
   top: 0;
   width: 100%;
@@ -29,6 +29,23 @@
   gap: 16px;
   margin-left: auto;
 }
+.nav-links a {
+  position: relative;      
+  padding-bottom: 10px;    
+}
+
+.nav-links a.active::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;    
+}
+
 
 .nav-links a {
   text-decoration: none;
@@ -37,7 +54,7 @@
 }
 
 .nav-links a.active {
-  color: #ba5bfa;
+  color: #fff;
   font-weight: 600;
 }
 
@@ -66,8 +83,31 @@
 
 .mobile-menu a.active {
   background: #f3e6ff;
-  color: #9900ff;
+  color: #37E8D1;
 }
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+}
+
+.nav-link-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  position: relative;
+  padding-bottom: 10px;
+}
+
 
 /* Mobile */
 @media (max-width: 768px) {

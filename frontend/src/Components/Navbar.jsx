@@ -1,11 +1,13 @@
 import { NavLink, Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { useAuth } from "../Context/AuthContext";
 import "./Navbar.css";
 
 function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
   const { cartItems } = useContext(CartContext);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -16,19 +18,36 @@ function Navbar() {
           The Drop
         </Link>
 
+        {/* DESKTOP */}
         <nav className="nav-links">
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/catalog">Catálogo</NavLink>
 
-          <NavLink to="/cart">
-            Carrito ({cartItems?.length ?? 0})
-          </NavLink>
+          {user && (
+            <>
+              <NavLink to="/cart">
+                Carrito ({cartItems?.length ?? 0})
+              </NavLink>
+              <NavLink to="/profile">Perfil</NavLink>
+              <NavLink to="/create-product">Publicar</NavLink>
+              <button
+                className="nav-link-btn logout-btn"
+                onClick={logout}
+              >
+                Salir
+              </button>
+            </>
+          )}
 
-          <NavLink to="/register">Registro</NavLink>
-          <NavLink to="/login">Login</NavLink>
+          {!user && (
+            <>
+              <NavLink to="/register">Registro</NavLink>
+              <NavLink to="/login">Login</NavLink>
+            </>
+          )}
         </nav>
 
-        {/* Botón de menú móvil */}
+        {/* BOTÓN MENÚ MÓVIL */}
         <button
           className="menu-btn"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -38,18 +57,34 @@ function Navbar() {
         </button>
       </div>
 
-      {/* Menú móvil */}
+      {/* MOBILE */}
       {menuOpen && (
         <nav className="mobile-menu" onClick={closeMenu}>
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/catalog">Catálogo</NavLink>
 
-          <NavLink to="/cart">
-            Carrito ({cartItems?.length ?? 0})
-          </NavLink>
+          {user && (
+            <>
+              <NavLink to="/cart">
+                Carrito ({cartItems?.length ?? 0})
+              </NavLink>
+              <NavLink to="/profile">Perfil</NavLink>
+              <NavLink to="/create-product">Publicar</NavLink>
+              <button
+                className="logout-btn"
+                onClick={logout}
+              >
+                Salir
+              </button>
+            </>
+          )}
 
-          <NavLink to="/register">Registro</NavLink>
-          <NavLink to="/login">Login</NavLink>
+          {!user && (
+            <>
+              <NavLink to="/register">Registro</NavLink>
+              <NavLink to="/login">Login</NavLink>
+            </>
+          )}
         </nav>
       )}
     </header>
