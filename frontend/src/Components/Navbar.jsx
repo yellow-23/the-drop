@@ -1,10 +1,12 @@
 import { NavLink, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { CartContext } from "../context/CartContext";
 import { useAuth } from "../Context/AuthContext";
 import "./Navbar.css";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const { cartItems } = useContext(CartContext);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
@@ -23,10 +25,17 @@ function Navbar() {
 
           {user && (
             <>
-              <NavLink to="/cart">Carrito</NavLink>
+              <NavLink to="/cart">
+                Carrito ({cartItems?.length ?? 0})
+              </NavLink>
               <NavLink to="/profile">Perfil</NavLink>
               <NavLink to="/create-product">Publicar</NavLink>
-              <button className="nav-link-btn logout-btn" onClick={logout}>Salir</button>
+              <button
+                className="nav-link-btn logout-btn"
+                onClick={logout}
+              >
+                Salir
+              </button>
             </>
           )}
 
@@ -56,10 +65,17 @@ function Navbar() {
 
           {user && (
             <>
-              <NavLink to="/cart">Carrito</NavLink>
+              <NavLink to="/cart">
+                Carrito ({cartItems?.length ?? 0})
+              </NavLink>
               <NavLink to="/profile">Perfil</NavLink>
               <NavLink to="/create-product">Publicar</NavLink>
-              <button className="logout-btn">Salir</button>
+              <button
+                className="logout-btn"
+                onClick={logout}
+              >
+                Salir
+              </button>
             </>
           )}
 

@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../Context/FavoritesContext";
 import "./ProductCard.css";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 function ProductCard({
   id,
@@ -10,10 +12,12 @@ function ProductCard({
   gender,
   brand,
   price,
-} ) {
-  const Navigate = useNavigate();
+}) {
+  const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(id);
+
+  const { addToCart } = useContext(CartContext);
 
   return (
     <div className="product-card">
@@ -25,6 +29,7 @@ function ProductCard({
       >
         ♥
       </button>
+
       <div className="product-image">
         <img
           src={image || "/images/placeholder-shoe.png"}
@@ -48,11 +53,31 @@ function ProductCard({
         </p>
 
         <p className="product-price">${price}</p>
-
       </div>
-      <button className="product-btn" onClick={() => Navigate("/product/${product.id}")}>
-          DETALLE DEL PRODUCTO
-        </button>
+
+      <button
+        className="product-btn"
+        onClick={() =>
+          addToCart({
+            id,
+            image,
+            name,
+            size,
+            gender,
+            brand,
+            price,
+          })
+        }
+      >
+        AGREGAR AL CARRITO
+      </button>
+
+      <button
+        className="product-btn"
+        onClick={() => navigate(`/product/${id}`)}
+      >
+        DETALLE DEL PRODUCTO
+      </button>
     </div>
   );
 }
