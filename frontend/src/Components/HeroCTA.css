@@ -1,12 +1,12 @@
 .bg-hero-cta{
   background:
-    linear-gradient(135deg, rgba(255, 7, 69, 0.18), transparent 45%),
-    linear-gradient(rgba(194, 194, 210, 0.364), rgba(11,11,13,.75)),
+    linear-gradient(135deg, rgb(245, 9, 68), transparent 35%),
+    linear-gradient(rgba(11,11,13,.75), rgba(11,11,13,.75)),
     url("../assets/img/img-hero.jpg");
   background-size: auto, auto, cover;
   background-position: center, center, center;
+  background-repeat: no-repeat;
 }
-
 
 .button-cta-hero {
 	border: none;
@@ -23,4 +23,4 @@
 	background: #E8374E;
 		color: #fff;
 	}
-	.color-text-hero{ color:#fff; text-shadow: 0 1px 18px rgba(0,0,0,.45); }
+	.color-text-hero{color:#fff; text-shadow: 0 1px 18px rgba(0,0,0,.45); }

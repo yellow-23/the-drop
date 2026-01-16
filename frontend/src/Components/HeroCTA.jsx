@@ -10,8 +10,8 @@ export default function HeroCTA() {
   <Container>
     <Row className="align-items-center gx-2">
       <Col md={8}>
-        <h1 className="color-text-hero h3 mb-2 text-uppercase">THE DROP MARKETPLACE</h1>
-        <p className="color-text-hero mb-1">Compra y vende zapatillas nuevas o usadas</p>
+        <h1 className="color-text-hero h3 mt-4 mb-2 text-uppercase">THE DROP MARKETPLACE</h1>
+        <p className="color-text-hero mb-0">Compra y vende zapatillas nuevas o usadas</p>
         <p className="color-text-hero mb-0">Sé parte de la economía circular</p>
       </Col>
 
