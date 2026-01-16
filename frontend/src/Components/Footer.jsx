@@ -10,7 +10,6 @@ export default function Footer() {
     <footer className="bg-light border-top mt-5 py-4">
       <Container>
         <Row className="gy-4">
-          {/* Links de la página */}
           <Col xs={12} md={6}>
             <h6 className="text-uppercase mb-3">Página</h6>
             <Nav className="flex-column gap-2">
@@ -20,8 +19,6 @@ export default function Footer() {
               <Nav.Link href="/register" className="p-0 text-muted">Registro</Nav.Link>
             </Nav>
           </Col>
-
-          {/* Categorías */}
           <Col xs={12} md={6}>
             <h6 className="text-uppercase mb-3">Categorías</h6>
             <Nav className="flex-column gap-2">

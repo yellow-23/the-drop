@@ -9,7 +9,6 @@ export default function ImpactBanner() {
     <section className="bg-light p-4 my-5">
       <Container>
         <Row className="align-items-center g-4 justify-content-center">
-          {/* Icono */}
           <Col xs="auto" className="text-center">
             <img
               src={globe}
@@ -18,7 +17,6 @@ export default function ImpactBanner() {
               style={{ width: 110, height: 110, objectFit: "contain" }}
             />
           </Col>
-          {/* Contenido */}
           <Col md>
             <h2 className="text-center mb-3">Impacto Ambiental</h2>
             <Row className="text-center g-4">
@@ -31,7 +29,6 @@ export default function ImpactBanner() {
                   </div>
                 </div>
               </Col>
-
               <Col sm={6}>
                 <div className="d-flex justify-content-center align-items-baseline gap-2">
                   <span className="display-5 fw-semibold mb-0">+50</span>

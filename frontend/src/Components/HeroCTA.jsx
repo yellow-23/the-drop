@@ -14,7 +14,6 @@ export default function HeroCTA() {
         <p className="color-text-hero mb-0">Compra y vende zapatillas nuevas o usadas</p>
         <p className="color-text-hero mb-0">Sé parte de la economía circular</p>
       </Col>
-
       <Col md={4} className="d-flex justify-content-md-end gap-3 mt-3 mt-md-0">
         <Button variant="secondary" size="lg" className="button-cta-hero 	button-cta-hero_primary rounded-pill px-6">
           Comprar
