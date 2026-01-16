@@ -1,5 +1,19 @@
+import HeroCTA from "../Components/HeroCTA";
+import Footer from "../Components/Footer";
+import SloganTitle from "../Components/SloganTitle";
+import HowItWorks from "../Components/HowItWorks";
+
 function Home() {
-  return <h1>Home</h1>;
+  return (
+    <>
+    <main className="pt-4">
+      <HeroCTA />
+      <SloganTitle />
+      <HowItWorks />
+      <Footer />
+      </main>
+    </>
+  );
 }
 
 export default Home;

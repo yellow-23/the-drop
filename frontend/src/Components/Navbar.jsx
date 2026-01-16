@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../Context/AuthContext";
 import "./Navbar.css";
+import logo from "../assets/img/the-drop-logo-horizontal.png";
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -14,8 +15,8 @@ function Navbar() {
   return (
     <header className="app-navbar">
       <div className="navbar-container">
-        <Link to="/" className="logo">
-          The Drop
+        <Link to="/">
+        <img className="logo" src={logo} alt="The Drop" />
         </Link>
 
         {/* DESKTOP */}
