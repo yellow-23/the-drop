@@ -1,6 +1,7 @@
 import HeroCTA from "../Components/HeroCTA";
 import Footer from "../Components/Footer";
 import SloganTitle from "../Components/SloganTitle";
+import HowItWorks from "../Components/HowItWorks";
 
 function Home() {
   return (
@@ -8,6 +9,7 @@ function Home() {
     <h1>Bienvenido a The Drop</h1>
       <HeroCTA />
       <SloganTitle />
+      <HowItWorks />
       <Footer />
     </>
   );
