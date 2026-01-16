@@ -6,11 +6,12 @@ import HowItWorks from "../Components/HowItWorks";
 function Home() {
   return (
     <>
-    <h1>Bienvenido a The Drop</h1>
+    <main className="pt-4">
       <HeroCTA />
       <SloganTitle />
       <HowItWorks />
       <Footer />
+      </main>
     </>
   );
 }

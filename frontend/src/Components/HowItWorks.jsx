@@ -13,7 +13,6 @@ export default function HowItWorks() {
     <section className="howitworks my-5">
       <Container>
         <h2 className="howitworks__title text-center mb-4">¿Cómo Funciona?</h2>
-
         <Row className="g-4 justify-content-center">
           <Col xs={10} sm={6} md={3}>
             <div className="howitworks__card">

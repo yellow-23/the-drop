@@ -1,4 +1,25 @@
-.button-cta-hero{
-	background-color: #E8374E;
-	color: #fff;
+.bg-hero-cta{
+ background:
+    linear-gradient(135deg, rgba(232,55,78,.18), transparent 55%),
+    #0b0b0d;
+  border: 1px solid rgba(255,255,255,.08);
+  position: relative;
+  overflow: hidden;
 }
+
+.button-cta-hero {
+	border: none;
+	padding: 10px 40px;
+	border-radius: 4px;
+	font-weight: 600;
+	cursor: pointer;}
+
+	.button-cta-hero_variant{
+	background: #fff;
+	color: #000;
+	}
+	.button-cta-hero_primary{
+	background: #E8374E;
+		color: #fff;
+	}
+	.color-text-hero{ color:#fff; text-shadow: 0 1px 18px rgba(0,0,0,.45); }
