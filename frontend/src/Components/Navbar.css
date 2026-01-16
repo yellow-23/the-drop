@@ -1,3 +1,4 @@
+
 .app-navbar { 
   background: #E8374E;
   position: fixed;
@@ -22,6 +23,10 @@
   font-weight: 600;
   text-decoration: none;
   color: #ffffff;
+   height: 40px;   /* o lo que necesites */
+  width: auto;
+  display: block;
+  margin-top:0;
 }
 
 .nav-links {
