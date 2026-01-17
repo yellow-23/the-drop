@@ -1,0 +1,137 @@
+.cart-summary {
+  position: sticky;
+  top: 100px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  height: fit-content;
+}
+
+.cart-summary h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.summary-item span:first-child {
+  font-weight: 500;
+}
+
+.amount {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.amount.free {
+  color: #4caf50;
+}
+
+.free-shipping-msg {
+  color: #ff9800;
+  font-size: 0.85rem;
+  margin: 1rem 0 0 0;
+  padding: 0.75rem;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.summary-divider {
+  height: 2px;
+  background: #e5e5e5;
+  margin: 1.5rem 0;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+}
+
+.summary-total .amount {
+  color: #810fce;
+  font-size: 1.5rem;
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #810fce 0%, #6a0dad 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 15, 206, 0.3);
+}
+
+.btn-clear-summary {
+  width: 100%;
+  padding: 0.9rem;
+  background: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem;
+}
+
+.btn-clear-summary:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.summary-info {
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.summary-info p {
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cart-summary {
+    position: static;
+    margin-top: 2rem;
+  }
+}
