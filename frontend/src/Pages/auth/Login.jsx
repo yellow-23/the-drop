@@ -1,5 +1,5 @@
-import "../Styles/Auth.css";
-import { useAuth } from "../Context/AuthContext";
+import "../../Styles/Auth.css";
+import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

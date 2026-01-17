@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
-import ProductCard from "../Components/ProductCard";
-import { useFavorites } from "../Context/FavoritesContext";
-import { mockProducts } from "../mock/Products";
-import "../Styles/Profile.css";
-import "../Styles/Auth.css";
+import { useAuth } from "../../Context/AuthContext";
+import ProductCard from "../../Components/product/ProductCard";
+import { useFavorites } from "../../Context/FavoritesContext";
+import { mockProducts } from "../../mock/Products";
+import "../../Styles/Profile.css";
+import "../../Styles/Auth.css";
 
 function Profile() {
   const [section, setSection] = useState("favorites");
