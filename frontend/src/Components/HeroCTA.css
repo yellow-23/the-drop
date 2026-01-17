@@ -1,6 +1,7 @@
 .bg-hero-cta{
   background:
-    linear-gradient(135deg, rgb(245, 9, 68), transparent 35%),
+    linear-gradient(135deg, #c8ff00
+, transparent 30%),
     linear-gradient(rgba(11,11,13,.75), rgba(11,11,13,.75)),
     url("../assets/img/img-hero.jpg");
   background-size: auto, auto, cover;
@@ -20,7 +21,7 @@
 	color: #000;
 	}
 	.button-cta-hero_primary{
-	background: #E8374E;
+	background: #FF2E63;
 		color: #fff;
 	}
 	.color-text-hero{color:#fff; text-shadow: 0 1px 18px rgba(0,0,0,.45); }
