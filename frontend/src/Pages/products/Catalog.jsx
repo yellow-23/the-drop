@@ -1,13 +1,14 @@
-import { useState, useMemo, useContext } from 'react';
+import { useState, useMemo, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../Context/CartContext';
-import { mockProducts } from '../../mock/Products';
+import { getProducts } from '../../mock/Products';
 import ProductCard from '../../Components/product/ProductCard';
 import './Catalog.css';
 import logo from '../../assets/img/the-drop-logo-horizontal.png';
 import { BsCart3 } from 'react-icons/bs';
 
 function Catalog() {
+  const [products, setProducts] = useState([]);
   const [filtros, setFiltros] = useState({
     marca: '',
     precioMin: '',
@@ -18,8 +19,12 @@ function Catalog() {
   const { cartItems } = useContext(CartContext);
   const navigate = useNavigate();
 
+useEffect(() => {
+    setProducts(getProducts());
+  }, []);
+
   const productosFiltrarados = useMemo(() => {
-    let resultado = [...mockProducts];
+    let resultado = [...products];
 
     if (filtros.marca) {
       resultado = resultado.filter(p =>
@@ -40,7 +45,7 @@ function Catalog() {
     }
 
     return resultado;
-  }, [filtros]);
+  }, [products, filtros]);
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
@@ -138,7 +143,7 @@ function Catalog() {
         </div>
       </div>
 
-      {/* Grid de Productos */}
+      {/* Productos */}
       <div className="productos-section">
         <p className="resultado-count">
           {productosFiltrarados.length} zapatillas encontradas

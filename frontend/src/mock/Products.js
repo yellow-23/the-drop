@@ -1,4 +1,6 @@
-export const mockProducts = [
+const STORAGE_KEY = "products";
+
+const initialProducts = [
   {
     id: 1,
     name: "Nike Air Force 1",
@@ -18,7 +20,8 @@ export const mockProducts = [
     brand: "Adidas",
     price: 38000,
     condition: "Usado",
-    description: "Zapatillas usadas en ecelente estado con su caja original, sólo 3 posturas",
+    description:
+      "Zapatillas usadas en excelente estado, solo 3 posturas",
     image: "/img/shoe.png",
   },
   {
@@ -29,13 +32,24 @@ export const mockProducts = [
     brand: "Puma",
     price: 32000,
     condition: "Nuevo",
-    description: "Las vendo porque me quedaron pequeñas, sin uso y con su caja",
+    description:
+      "Las vendo porque me quedaron pequeñas, sin uso y con su caja",
     image: "/img/shoe.png",
   },
 ];
 
-export const getProducts = () => mockProducts;
+export const initProducts = () => {
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialProducts));
+  }
+};
+
+export const getProducts = () => {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+};
 
 export const addProduct = (product) => {
-  mockProducts = [...mockProducts, product];
+  const products = getProducts();
+  const updated = [...products, product];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 };

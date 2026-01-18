@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useContext, useMemo } from 'react';
-import { mockProducts } from '../../mock/Products';
+import { getProducts } from '../../mock/Products';
 import { CartContext } from '../../Context/CartContext';
 import { useFavorites } from '../../Context/FavoritesContext';
 import './ProductDetail.css';
@@ -12,7 +12,7 @@ function ProductDetail() {
   const { toggleFavorite, isFavorite } = useFavorites();
 
   const product = useMemo(() => {
-    return mockProducts.find(p => p.id === parseInt(id));
+    return getProducts().find(p => p.id === parseInt(id));
   }, [id]);
 
   const isFav = isFavorite(id);

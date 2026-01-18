@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
-import ProductCard from "../Components/ProductCard";
-import { useFavorites } from "../Context/FavoritesContext";
-import { mockProducts } from "../mock/Products";
-import "../Styles/Profile.css";
-import "../Styles/Form.css";
+import { useAuth } from "../../Context/AuthContext";
+import ProductCard from "../../Components//product/ProductCard";
+import { useFavorites } from "../../Context/FavoritesContext";
+import { getProducts } from "../../mock/Products";
+import "../../Styles/Profile.css";
+import "../../Styles/Form.css";
 
 function Profile() {
   const [section, setSection] = useState("favorites");
@@ -34,6 +33,11 @@ function Profile() {
       e.preventDefault();
       updateProfile(formData);
   };
+
+  const myProducts = getProducts().filter(
+  (p) => p.owner === user?.email
+);
+
 
   return (
     <div className="container-fluid profile-page">
@@ -112,19 +116,23 @@ function Profile() {
   </>
 )}
        {section === "posts" && (
-            <>
-              <h3>Mis publicaciones</h3>
-              <div className="profile-divider">
-              </div>
-              <div className="row g-3 justify-content-center">
-                {mockProducts.map((p) => (
-                  <div key={p.id} className="col-12 col-sm-6 col-lg-4">
-                    <ProductCard {...p} showDelete />
-                  </div>
-                ))}
-              </div>
-            </>
-          )}   
+  <>
+    <h3>Mis publicaciones</h3>
+    <div className="profile-divider"></div>
+
+    {myProducts.length === 0 ? (
+      <p>No has publicado productos aún</p>
+    ) : (
+      <div className="row g-3 justify-content-center">
+        {myProducts.map((p) => (
+          <div key={p.id} className="col-12 col-sm-6 col-lg-4">
+            <ProductCard key={p.id} {...p} showDelete />
+          </div>
+        ))}
+      </div>
+    )}
+  </>
+)}
 
           {section === "edit" && (
   <>
