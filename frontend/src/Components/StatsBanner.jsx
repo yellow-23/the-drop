@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 
 import globe from "../assets/img/globe.png";
 
-export default function ImpactBanner() {
+export default function StatsBannerBanner() {
   return (
     <section className="bg-light p-4 my-5">
       <Container>
