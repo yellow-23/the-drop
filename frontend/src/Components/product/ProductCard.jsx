@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "../Context/FavoritesContext";
+import { useFavorites } from "../../Context/FavoritesContext";
 import "./ProductCard.css";
 import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../../Context/CartContext";
 
 function ProductCard({
   id,
@@ -55,29 +55,31 @@ function ProductCard({
         <p className="product-price">${price}</p>
       </div>
 
-      <button
-        className="product-btn"
-        onClick={() =>
-          addToCart({
-            id,
-            image,
-            name,
-            size,
-            gender,
-            brand,
-            price,
-          })
-        }
-      >
-        AGREGAR AL CARRITO
-      </button>
+      <div className="product-actions">
+        <button
+          className="product-btn product-btn-carrito"
+          onClick={() =>
+            addToCart({
+              id,
+              image,
+              name,
+              size,
+              gender,
+              brand,
+              price,
+            })
+          }
+        >
+          AGREGAR AL CARRITO
+        </button>
 
-      <button
-        className="product-btn"
-        onClick={() => navigate(`/product/${id}`)}
-      >
-        DETALLE DEL PRODUCTO
-      </button>
+        <button
+          className="product-btn product-btn-detalle"
+          onClick={() => navigate(`/product/${id}`)}
+        >
+          DETALLE
+        </button>
+      </div>
     </div>
   );
 }

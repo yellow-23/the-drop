@@ -3,10 +3,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./HowItWorks.css";
 
-import dropSneaker from "../assets/img/dropsneaker.png";
-import secure from "../assets/img/secure.png";
-import recycle from "../assets/img/recycle.png";
-import life from "../assets/img/life.png";
+import dropSneaker from "../../assets/img/dropsneaker.png";
+import secure from "../../assets/img/secure.png";
+import recycle from "../../assets/img/recycle.png";
+import life from "../../assets/img/life.png";
 
 export default function HowItWorks() {
   return (

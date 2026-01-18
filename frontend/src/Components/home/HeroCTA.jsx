@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import "./HeroCTA.css";
-import handDrop from "../assets/img/hand-drop.png";
+import handDrop from "../../assets/img/hand-drop.png";
 
 export default function HeroCTA() {
   return (
