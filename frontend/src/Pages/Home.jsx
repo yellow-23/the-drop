@@ -7,7 +7,7 @@ import StatsBanner from "../Components/statsBanner";
 function Home() {
   return (
     <>
-    <main className="pt-4">
+    <main>
       <HeroCTA />
       <SloganTitle />
       <HowItWorks />

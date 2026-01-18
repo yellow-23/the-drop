@@ -7,7 +7,7 @@ import Nav from "react-bootstrap/Nav";
 
 export default function Footer() {
   return (
-    <footer className="bg-light border-top mt-5 py-4">
+    <footer className="bg-light border-top py-4">
       <Container>
         <Row className="gy-4">
           <Col xs={12} md={6}>

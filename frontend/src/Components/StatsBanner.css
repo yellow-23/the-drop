@@ -1,0 +1,10 @@
+.bg-stats-banner{
+  background:
+    linear-gradient(135deg, #c8ff00
+, transparent 30%),
+    linear-gradient(rgba(49, 49, 49, 0.75), rgba(78, 78, 78, 0.75)),
+    url("../assets/img/img-stats.jpg");
+  background-size: auto, auto, cover;
+  background-position: center, center, top;
+  background-repeat: no-repeat;
+}
