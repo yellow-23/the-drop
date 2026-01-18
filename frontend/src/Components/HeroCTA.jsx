@@ -11,7 +11,7 @@ export default function HeroCTA() {
   <Container>
     <Row className="align-items-center gx-2">
       <Col md={1}>
-      <img className="hand-drop mt-2"src={handDrop} alt="" />
+      <img className="hand-drop"src={handDrop} alt="" />
       </Col>
       <Col md={6}>
         <h1 className="color-text-hero h3 mt-4 mb-2 text-uppercase">THE DROP MARKETPLACE</h1>

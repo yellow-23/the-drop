@@ -11,7 +11,7 @@ export default function Footer() {
       <Container>
         <Row className="gy-4">
           <Col xs={12} md={6}>
-            <h6 className="text-uppercase mb-3">Página</h6>
+            <h6 className="text-uppercase mb-3">Menú</h6>
             <Nav className="flex-column gap-2">
               <Nav.Link href="/" className="p-0 text-muted">Home</Nav.Link>
               <Nav.Link href="/catalog" className="p-0 text-muted">Galería</Nav.Link>

@@ -18,7 +18,7 @@ export default function StatsBanner() {
             />
           </Col>
           <Col md>
-            <h2 className="text-light text-center mb-3">Impacto Ambiental</h2>
+            <h2 className="text-light text-center mb-3">Impacto en el medio ambiente</h2>
             <Row className="text-light text-center g-4">
               <Col sm={6}>
                 <div className="d-flex justify-content-center align-items-baseline gap-2 text-light">

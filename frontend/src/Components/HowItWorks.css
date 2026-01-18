@@ -1,15 +1,14 @@
 .howitworks {
-  background: #000;
+  background: #c8ff00;
   padding: 32px 0;
 }
 
 .howitworks__title {
   font-weight: 500;
-	color: #E8374E;
 }
 
 .howitworks__card {
-  background: #E8374E;
+  background: #c8ff00;
   border-radius: 28px;
   padding: 10px;
   text-align: center;

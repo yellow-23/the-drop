@@ -5,7 +5,7 @@
     linear-gradient(rgba(11,11,13,.75), rgba(11,11,13,.75)),
     url("../assets/img/img-hero.jpg");
   background-size: auto, auto, cover;
-  background-position: center, center, center;
+  background-position: center, center, top;
   background-repeat: no-repeat;
 }
 
@@ -17,7 +17,7 @@
 	cursor: pointer;}
 
 	.button-cta-hero_variant{
-	background: #fff;
+	background: #c8ff00;
 	color: #000;
 	}
 	.button-cta-hero_primary{

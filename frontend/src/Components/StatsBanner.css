@@ -1,10 +1,14 @@
 .bg-stats-banner{
+  min-height: clamp(220px, 32vh, 420px); /* +alto y responsive */
+  display: flex;
+  align-items: center; /* centra vertical el contenido */
+
   background:
-    linear-gradient(135deg, #c8ff00
-, transparent 30%),
-    linear-gradient(rgba(49, 49, 49, 0.75), rgba(78, 78, 78, 0.75)),
+    linear-gradient(135deg, #FF2E63, transparent 30%),
+    linear-gradient(rgba(0, 0, 0, 0.875), rgba(144, 143, 143, 0.75)),
     url("../assets/img/img-stats.jpg");
-  background-size: auto, auto, cover;
-  background-position: center, center, top;
+
+  background-size: 100% 100%, 100% 100%, cover; /* clave */
+  background-position: center, center, bottom;
   background-repeat: no-repeat;
 }
