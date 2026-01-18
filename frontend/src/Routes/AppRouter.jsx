@@ -2,14 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
-import Home from "../Pages/Home";
-import Catalog from "../Pages/Catalog";
-import ProductDetail from "../Pages/ProductDetail";
-import CreateProduct from "../Pages/CreateProduct";
-import Profile from "../Pages/Profile";
-import Cart from "../Pages/Cart";
-import Login from "../Pages/Login";
-import Register from "../Pages/Register";
+import Home from "../Pages/home/Home";
+import Catalog from "../Pages/products/Catalog";
+import ProductDetail from "../Pages/products/ProductDetail";
+import CreateProduct from "../Pages/products/CreateProduct";
+import Profile from "../Pages/profile/Profile";
+import Cart from "../Pages/cart/Cart";
+import Login from "../Pages/auth/Login";
+import Register from "../Pages/auth/Register";
 
 function AppRouter() {
   return (
@@ -18,6 +18,7 @@ function AppRouter() {
       <Route path="/" element={<Home />} />
       <Route path="/catalog" element={<Catalog />} />
       <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/cart" element={<Cart />} />
 
       {/* Públicas bloqueadas si hay sesión */}
       <Route
@@ -51,14 +52,6 @@ function AppRouter() {
         element={
           <ProtectedRoute>
             <CreateProduct />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/cart"
-        element={
-          <ProtectedRoute>
-            <Cart />
           </ProtectedRoute>
         }
       />
