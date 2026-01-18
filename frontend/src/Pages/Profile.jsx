@@ -6,7 +6,7 @@ import ProductCard from "../Components/ProductCard";
 import { useFavorites } from "../Context/FavoritesContext";
 import { mockProducts } from "../mock/Products";
 import "../Styles/Profile.css";
-import "../Styles/Auth.css";
+import "../Styles/Form.css";
 
 function Profile() {
   const [section, setSection] = useState("favorites");
@@ -133,10 +133,10 @@ function Profile() {
 
     <div className="row justify-content-center">
       <div className="col-12 col-md-8 col-lg-6">
-        <form className="auth-card" onSubmit={handleSubmit}>
+        <form className="form-card" onSubmit={handleSubmit}>
           <h2>Actualiza tus datos</h2>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Avatar (URL)</label>
             <input
               name="avatar"
@@ -146,7 +146,7 @@ function Profile() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Nickname</label>
             <input
               name="nickname"
@@ -156,7 +156,7 @@ function Profile() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Nombre</label>
             <input
               name="name"
@@ -166,7 +166,7 @@ function Profile() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Apellido</label>
             <input
               name="lastname"
@@ -176,12 +176,12 @@ function Profile() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Email</label>
             <input value={formData.email} disabled />
           </div>
 
-          <div className="auth-field">
+          <div className="form-field">
             <label>Contraseña</label>
             <input
               type="password"
@@ -191,7 +191,7 @@ function Profile() {
             />
           </div>
 
-          <button className="auth-button">
+          <button className="form-button">
             Guardar cambios
           </button>
         </form>
