@@ -1,5 +1,5 @@
 function CreateProduct() {
-  return <h1>Crear producto</h1>;
+  return <h1>Publicar</h1>
 }
 
 export default CreateProduct;

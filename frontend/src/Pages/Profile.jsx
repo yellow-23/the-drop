@@ -114,7 +114,8 @@ function Profile() {
        {section === "posts" && (
             <>
               <h3>Mis publicaciones</h3>
-              <div className="profile-divider"></div>
+              <div className="profile-divider">
+              </div>
               <div className="row g-3 justify-content-center">
                 {mockProducts.map((p) => (
                   <div key={p.id} className="col-12 col-sm-6 col-lg-4">
@@ -126,73 +127,78 @@ function Profile() {
           )}   
 
           {section === "edit" && (
-           <div className="row justify-content-center">
-            <h3>Editar perfil</h3>
-            <div className="profile-divider"></div>
-    <form className="auth-card" onSubmit={handleSubmit}>
-      <h2>Actualiza tus datos</h2>
+  <>
+    <h3>Editar perfil</h3>
+    <div className="profile-divider"></div>
 
-      <div className="auth-field">
-        <label>Avatar (URL)</label>
-        <input
-          name="avatar"
-          value={formData.avatar}
-          onChange={handleChange}
-          placeholder="https://..."
-        />
+    <div className="row justify-content-center">
+      <div className="col-12 col-md-8 col-lg-6">
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <h2>Actualiza tus datos</h2>
+
+          <div className="auth-field">
+            <label>Avatar (URL)</label>
+            <input
+              name="avatar"
+              value={formData.avatar}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
+
+          <div className="auth-field">
+            <label>Nickname</label>
+            <input
+              name="nickname"
+              value={formData.nickname}
+              onChange={handleChange}
+              placeholder="Nickname"
+            />
+          </div>
+
+          <div className="auth-field">
+            <label>Nombre</label>
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Nombre"
+            />
+          </div>
+
+          <div className="auth-field">
+            <label>Apellido</label>
+            <input
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              placeholder="Apellido"
+            />
+          </div>
+
+          <div className="auth-field">
+            <label>Email</label>
+            <input value={formData.email} disabled />
+          </div>
+
+          <div className="auth-field">
+            <label>Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button className="auth-button">
+            Guardar cambios
+          </button>
+        </form>
       </div>
-
-      <div className="auth-field">
-        <label>Nickname</label>
-        <input
-          name="nickname"
-          value={formData.nickname}
-          onChange={handleChange}
-          placeholder="Nickname"
-        />
-      </div>
-
-      <div className="auth-field">
-        <label>Nombre</label>
-        <input
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Nombre"
-        />
-      </div>
-
-      <div className="auth-field">
-        <label>Apellido</label>
-        <input
-          name="lastname"
-          value={formData.lastname}
-          onChange={handleChange}
-          placeholder="Apellido"
-        />
-      </div>
-
-      <div className="auth-field">
-        <label>Email</label>
-        <input value={formData.email} disabled />
-      </div>
-
-      <div className="auth-field">
-        <label>Contraseña</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-      </div>
-
-      <button className="auth-button">
-        Guardar cambios
-      </button>
-    </form>
-  </div>
-          )}
+    </div>
+  </>
+)}
         </main>
       </div>
     </div>

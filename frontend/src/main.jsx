@@ -5,7 +5,7 @@ import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./Context/CartContext";
 import { AuthProvider } from './Context/AuthContext.jsx'
 import { FavoritesProvider } from './Context/FavoritesContext.jsx'
 

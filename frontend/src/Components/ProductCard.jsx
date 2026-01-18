@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../Context/FavoritesContext";
 import "./ProductCard.css";
 import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../Context/CartContext";
 
 function ProductCard({
   id,
@@ -12,6 +12,7 @@ function ProductCard({
   gender,
   brand,
   price,
+  condition,
 }) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -24,7 +25,7 @@ function ProductCard({
       <button
         className={`favorite-btn ${favorite ? "active" : ""}`}
         onClick={() =>
-          toggleFavorite({ id, image, name, size, gender, brand, price })
+          toggleFavorite({ id, image, name, size, gender, brand, price, condition })
         }
       >
         ♥
