@@ -1,5 +1,4 @@
 import Container from "react-bootstrap/Container";
-import "./SloganTitle.css";
 export default function SloganTitle() {
   return (
     <section className="my-4">
