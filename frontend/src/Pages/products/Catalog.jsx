@@ -143,11 +143,11 @@ function Catalog() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Productos */}
-=======
       {/* Grid de Productos */}
-      {/* Grid de Productos */}
+      <div className="productos-section">
+        <p className="resultado-count">
+          {productosFiltrarados.length} zapatillas encontradas
+        </p>
         
         <div className="productos-grid">
           {productosFiltrarados.length > 0 ? (
