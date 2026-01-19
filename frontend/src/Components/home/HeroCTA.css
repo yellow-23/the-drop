@@ -1,9 +1,8 @@
 .bg-hero-cta{
   background:
-    linear-gradient(135deg, #c8ff00
-, transparent 30%),
+    linear-gradient(135deg, #c8ff00, transparent 30%),
     linear-gradient(rgba(11,11,13,.75), rgba(11,11,13,.75)),
-    url("../assets/img/img-hero.jpg");
+    url("../../assets/img/img-hero.jpg");
   background-size: auto, auto, cover;
   background-position: center, center, top;
   background-repeat: no-repeat;
