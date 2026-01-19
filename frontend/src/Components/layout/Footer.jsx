@@ -2,10 +2,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
+import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="bg-light border-top py-4">
+    <footer className="bg-footer-thedrop border-top py-4">
       <Container>
         <Row className="gy-4">
           <Col xs={12} md={6}>

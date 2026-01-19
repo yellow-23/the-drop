@@ -1,20 +1,31 @@
 .howitworks {
-  background: #c8ff00;
+   min-height: clamp(270px, 32vh, 420px);
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(135deg, #810fce , transparent 30%),
+    linear-gradient(rgba(154, 2, 214, 0.875), rgba(144, 143, 143, 0.75)),
+url("../../assets/img/img-stats.jpg");
+;
+  background-size: 100% 100%, 100% 100%, cover; 
+  background-position: center, center, bottom;
+  background-repeat: no-repeat;
   padding: 32px 0;
+  color: #fff;
 }
 
 .howitworks__title {
   font-weight: 500;
 }
-
+/*
 .howitworks__card {
-  background: #c8ff00;
+  background: #810fce ;
   border-radius: 28px;
   padding: 10px;
   text-align: center;
   height: 100%;
 }
-
+*/
 .howitworks__icon {
   width: 110px;
   height: 110px;
