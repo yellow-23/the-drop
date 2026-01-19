@@ -7,7 +7,7 @@ import handDrop from "../../assets/img/hand-drop.png";
 
 export default function HeroCTA() {
   return (
-  <section className="bg-hero-cta p-4 my-4">
+  <section className="bg-hero-cta p-4">
   <Container>
     <Row className="align-items-center gx-2">
       <Col md={1}>
