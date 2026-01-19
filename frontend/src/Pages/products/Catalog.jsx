@@ -19,7 +19,7 @@ function Catalog() {
   const { cartItems } = useContext(CartContext);
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     setProducts(getProducts());
   }, []);
 
@@ -143,11 +143,11 @@ useEffect(() => {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Productos */}
-      <div className="productos-section">
-        <p className="resultado-count">
-          {productosFiltrarados.length} zapatillas encontradas
-        </p>
+=======
+      {/* Grid de Productos */}
+      {/* Grid de Productos */}
         
         <div className="productos-grid">
           {productosFiltrarados.length > 0 ? (

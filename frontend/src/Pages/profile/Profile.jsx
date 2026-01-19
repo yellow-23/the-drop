@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import ProductCard from "../../Components//product/ProductCard";
+import ProductCard from "../../Components/product/ProductCard";
 import { useFavorites } from "../../Context/FavoritesContext";
 import { getProducts } from "../../mock/Products";
 import "../../Styles/Profile.css";

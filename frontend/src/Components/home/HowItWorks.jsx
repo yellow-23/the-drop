@@ -10,7 +10,7 @@ import life from "../../assets/img/life.png";
 
 export default function HowItWorks() {
   return (
-    <section className="howitworks my-5">
+    <section className="howitworks">
       <Container>
         <h2 className="howitworks__title text-center mb-4">¿Cómo Funciona?</h2>
         <Row className="g-4 justify-content-center">
