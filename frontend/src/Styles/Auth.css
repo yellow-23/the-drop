@@ -44,7 +44,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 8px;
-  background: #E8374E;
+  background: #810fce;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -53,7 +53,7 @@
 }
 
 .auth-button:hover {
-  background: #EC5B6E;
+  background: #6a0dad;
 }
 
 .auth-footer {
@@ -63,7 +63,7 @@
 }
 
 .auth-footer a {
-  color: #E8374E;
+  color: #810fce;
   text-decoration: none;
   font-weight: 500;
 }
