@@ -113,3 +113,22 @@ CREATE TABLE items_orden (
     cantidad INTEGER,
     precio_snapshot_clp INTEGER
 );
+
+INSERT INTO marcas (id, nombre) VALUES 
+(1, 'Nike'),
+(2, 'Adidas'),
+(3, 'Puma'),
+(4, 'New Balance'),
+(5, 'Converse');
+
+INSERT INTO tallas_cl (id, talla_cl) VALUES 
+(1, 35.0),
+(2, 36.0),
+(3, 37.0),
+(4, 38.0),
+(5, 39.0),
+(6, 40.0),
+(7, 41.0),
+(8, 42.0),
+(9, 43.0),
+(10, 44.0);

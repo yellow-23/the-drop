@@ -5,6 +5,7 @@ require("dotenv").config();
 const pool = require("./db");
 
 const productsRoutes = require("./routes/products_routes");
+const authRoutes = require("./routes/auth_routes");
 
 const app = express();
 
@@ -24,10 +25,7 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-app.get("/api/users", (req, res) => {
-  res.json({ message: "Ruta usuarios lista" });
-});
-
+app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 
 module.exports = app;
