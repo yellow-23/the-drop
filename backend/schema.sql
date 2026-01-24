@@ -132,3 +132,14 @@ INSERT INTO tallas_cl (id, talla_cl) VALUES
 (8, 42.0),
 (9, 43.0),
 (10, 44.0);
+
+INSERT INTO usuarios (id, nombre, email, password_hash, region, comuna, reputacion, creado_en) VALUES 
+(1, 'Juan Test', 'juan@test.com', '$2a$10$test', 'Región Metropolitana', 'Santiago', 5.0, NOW());
+
+INSERT INTO productos (id, usuario_id, marca_id, titulo, modelo, descripcion, creado_en) VALUES 
+(1, 1, 1, 'Nike Air Force 1', 'AF1 Classic', 'Zapatillas clásicas de Nike', NOW());
+
+INSERT INTO variantes_producto (id, producto_id, talla_id, precio_clp, stock) VALUES 
+(1, 1, 6, 45000, 10),
+(2, 1, 7, 45000, 8),
+(3, 1, 8, 45000, 5);

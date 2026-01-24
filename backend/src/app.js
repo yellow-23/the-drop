@@ -6,6 +6,8 @@ const pool = require("./db");
 
 const productsRoutes = require("./routes/products_routes");
 const authRoutes = require("./routes/auth_routes");
+const cartRoutes = require("./routes/cart_routes");
+const orderRoutes = require("./routes/order_routes");
 
 const app = express();
 
@@ -27,5 +29,7 @@ app.get("/api/health", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 module.exports = app;
