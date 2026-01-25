@@ -2,20 +2,67 @@ const pool = require("../db");
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const result = await pool.query(`
-      SELECT 
+    const { search, marca_id, talla_id, precio_min, precio_max } = req.query;
+
+    let query = `
+      SELECT DISTINCT
         p.id, 
         p.titulo, 
         p.modelo, 
         p.descripcion,
         m.nombre as marca,
         p.creado_en,
-        u.nombre as usuario
+        u.nombre as usuario,
+        MIN(vp.precio_clp) as precio_minimo,
+        MAX(vp.precio_clp) as precio_maximo
       FROM productos p
       LEFT JOIN marcas m ON p.marca_id = m.id
       LEFT JOIN usuarios u ON p.usuario_id = u.id
-      ORDER BY p.creado_en DESC
-    `);
+      LEFT JOIN variantes_producto vp ON p.id = vp.producto_id
+    `;
+
+    const conditions = [];
+    const params = [];
+    let paramCount = 1;
+
+    if (search) {
+      conditions.push(`(p.titulo ILIKE $${paramCount} OR p.modelo ILIKE $${paramCount} OR p.descripcion ILIKE $${paramCount})`);
+      params.push(`%${search}%`);
+      paramCount++;
+    }
+
+    if (marca_id) {
+      conditions.push(`p.marca_id = $${paramCount}`);
+      params.push(marca_id);
+      paramCount++;
+    }
+
+    if (talla_id) {
+      conditions.push(`vp.talla_id = $${paramCount}`);
+      params.push(talla_id);
+      paramCount++;
+    }
+
+    if (precio_min || precio_max) {
+      if (precio_min) {
+        conditions.push(`vp.precio_clp >= $${paramCount}`);
+        params.push(precio_min);
+        paramCount++;
+      }
+      if (precio_max) {
+        conditions.push(`vp.precio_clp <= $${paramCount}`);
+        params.push(precio_max);
+        paramCount++;
+      }
+    }
+
+    if (conditions.length > 0) {
+      query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += " GROUP BY p.id, m.nombre, u.nombre ORDER BY p.creado_en DESC";
+
+    const result = await pool.query(query, params);
 
     res.json({
       ok: true,

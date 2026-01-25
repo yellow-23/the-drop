@@ -144,3 +144,41 @@ exports.getProfile = async (req, res) => {
     });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { nombre, region, comuna, avatar } = req.body;
+
+    const result = await pool.query(
+      `UPDATE usuarios 
+       SET nombre = COALESCE($2, nombre),
+           region = COALESCE($3, region),
+           comuna = COALESCE($4, comuna),
+           avatar = COALESCE($5, avatar)
+       WHERE id = $1
+       RETURNING id, email, nombre, region, comuna, reputacion, avatar`,
+      [userId, nombre, region, comuna, avatar]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        message: "Usuario no encontrado",
+      });
+    }
+
+    res.json({
+      ok: true,
+      message: "Perfil actualizado",
+      user: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error en updateProfile:", error);
+    res.status(500).json({
+      ok: false,
+      message: "Error al actualizar perfil",
+      error: error.message,
+    });
+  }
+};

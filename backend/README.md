@@ -110,11 +110,29 @@ GET /api/auth/profile
 Authorization: Bearer <TOKEN>
 ```
 
+#### Actualizar perfil (requiere token)
+```http
+PUT /api/auth/profile
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "nombre": "Juan Actualizado",
+  "region": "Región del Biobío",
+  "comuna": "Concepción",
+  "avatar": "https://example.com/avatar.jpg"
+}
+```
+
 ### Productos (`/api/products`)
 
-#### Listar productos
+#### Listar productos (con filtros)
 ```http
 GET /api/products
+GET /api/products?search=nike
+GET /api/products?marca_id=1
+GET /api/products?talla_id=6
+GET /api/products?precio_min=40000&precio_max=80000
 ```
 
 #### Obtener producto por ID
@@ -150,6 +168,250 @@ Content-Type: application/json
 #### Eliminar producto (requiere token)
 ```http
 DELETE /api/products/{id}
+Authorization: Bearer <TOKEN>
+```
+
+### Variantes (`/api/products/{productId}/variantes`)
+
+#### Obtener variantes de un producto
+```http
+GET /api/products/1/variantes
+```
+
+#### Crear variante (requiere token)
+```http
+POST /api/products/1/variantes
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "talla_id": 6,
+  "precio_clp": 45000,
+  "stock": 10
+}
+```
+
+#### Actualizar variante (requiere token)
+```http
+PUT /api/products/1/variantes/1
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "precio_clp": 50000,
+  "stock": 15
+}
+```
+
+#### Eliminar variante (requiere token)
+```http
+DELETE /api/products/1/variantes/1
+Authorization: Bearer <TOKEN>
+```
+
+### Imágenes de Productos (`/api/products/{productId}/imagenes`)
+
+#### Obtener imágenes de un producto
+```http
+GET /api/products/1/imagenes
+```
+
+#### Agregar imagen a producto (requiere token)
+```http
+POST /api/products/1/imagenes
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "url_imagen": "https://example.com/image.jpg"
+}
+```
+
+#### Eliminar imagen (requiere token)
+```http
+DELETE /api/products/1/imagenes/{imagenId}
+Authorization: Bearer <TOKEN>
+```
+
+### Carrito (`/api/cart`)
+
+#### Ver carrito (requiere token)
+```http
+GET /api/cart
+Authorization: Bearer <TOKEN>
+```
+
+#### Agregar item al carrito (requiere token)
+```http
+POST /api/cart/add
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "tipo_item": "producto",
+  "variante_producto_id": 1,
+  "cantidad": 2
+}
+```
+
+#### Remover item del carrito (requiere token)
+```http
+DELETE /api/cart/{itemId}
+Authorization: Bearer <TOKEN>
+```
+
+#### Vaciar carrito (requiere token)
+```http
+DELETE /api/cart
+Authorization: Bearer <TOKEN>
+```
+
+### Órdenes (`/api/orders`)
+
+#### Crear orden/Checkout (requiere token)
+```http
+POST /api/orders
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "region_envio": "Región Metropolitana",
+  "comuna_envio": "Santiago"
+}
+```
+
+#### Listar mis órdenes (requiere token)
+```http
+GET /api/orders
+Authorization: Bearer <TOKEN>
+```
+
+#### Obtener detalle de orden (requiere token)
+```http
+GET /api/orders/{orderId}
+Authorization: Bearer <TOKEN>
+```
+
+#### Actualizar estado de orden (requiere token)
+```http
+PUT /api/orders/{orderId}/status
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "estado": "confirmada"
+}
+```
+
+Estados válidos: `pendiente`, `confirmada`, `enviada`, `entregada`, `cancelada`
+
+### Favoritos (`/api/favorites`)
+
+#### Listar mis favoritos (requiere token)
+```http
+GET /api/favorites
+Authorization: Bearer <TOKEN>
+```
+
+#### Agregar a favoritos (requiere token)
+```http
+POST /api/favorites
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "tipo_item": "producto",
+  "producto_id": 1
+}
+```
+
+#### Remover de favoritos (requiere token)
+```http
+DELETE /api/favorites/{favoritoId}
+Authorization: Bearer <TOKEN>
+```
+
+### Publicaciones de Usuario (C2C) (`/api/publications`)
+
+#### Listar publicaciones (con filtros)
+```http
+GET /api/publications
+GET /api/publications?search=jordan
+GET /api/publications?marca_id=1
+GET /api/publications?talla_id=6
+GET /api/publications?precio_min=100000&precio_max=200000
+```
+
+#### Obtener publicación por ID
+```http
+GET /api/publications/{id}
+```
+
+#### Crear publicación (requiere token)
+```http
+POST /api/publications
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "titulo": "Air Jordan 1 Retro",
+  "modelo": "Chicago",
+  "condicion": "buen estado",
+  "precio_clp": 120000,
+  "descripcion": "Sneakers vintage, poco uso",
+  "region": "Región Metropolitana",
+  "comuna": "Santiago",
+  "marca_id": 1,
+  "talla_id": 6,
+  "tipo_entrega": "envío"
+}
+```
+
+#### Mis publicaciones (requiere token)
+```http
+GET /api/publications/usuario/mis-publicaciones
+Authorization: Bearer <TOKEN>
+```
+
+#### Actualizar publicación (requiere token)
+```http
+PUT /api/publications/{id}
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "precio_clp": 130000,
+  "descripcion": "Precio ajustado"
+}
+```
+
+#### Eliminar publicación (requiere token)
+```http
+DELETE /api/publications/{id}
+Authorization: Bearer <TOKEN>
+```
+
+### Imágenes de Publicaciones (`/api/publications/{publicacionId}/imagenes`)
+
+#### Obtener imágenes de una publicación
+```http
+GET /api/publications/1/imagenes
+```
+
+#### Agregar imagen a publicación (requiere token)
+```http
+POST /api/publications/1/imagenes
+Authorization: Bearer <TOKEN>
+Content-Type: application/json
+
+{
+  "url_imagen": "https://example.com/publication-image.jpg"
+}
+```
+
+#### Eliminar imagen de publicación (requiere token)
+```http
+DELETE /api/publications/imagenes/{imagenId}
 Authorization: Bearer <TOKEN>
 ```
 

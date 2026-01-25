@@ -1,13 +1,13 @@
 CREATE TABLE usuarios (
     id BIGINT PRIMARY KEY,
     nombre VARCHAR(120),
-    email VARCHAR(255),
-    password_hash TEXT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
     region VARCHAR(80),
     comuna VARCHAR(80),
     reputacion DECIMAL(2,1),
     avatar TEXT,
-    creado_en TIMESTAMPTZ
+    creado_en TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE marcas (
@@ -22,20 +22,20 @@ CREATE TABLE tallas_cl (
 
 CREATE TABLE productos (
     id BIGINT PRIMARY KEY,
-    usuario_id BIGINT REFERENCES usuarios(id),
+    usuario_id BIGINT NOT NULL REFERENCES usuarios(id),
     marca_id BIGINT REFERENCES marcas(id),
-    titulo VARCHAR(160),
-    modelo VARCHAR(120),
+    titulo VARCHAR(160) NOT NULL,
+    modelo VARCHAR(120) NOT NULL,
     descripcion TEXT,
-    creado_en TIMESTAMPTZ
+    creado_en TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE variantes_producto (
     id BIGINT PRIMARY KEY,
-    producto_id BIGINT REFERENCES productos(id),
-    talla_id BIGINT REFERENCES tallas_cl(id),
-    precio_clp INTEGER,
-    stock INTEGER
+    producto_id BIGINT NOT NULL REFERENCES productos(id),
+    talla_id BIGINT NOT NULL REFERENCES tallas_cl(id),
+    precio_clp INTEGER NOT NULL,
+    stock INTEGER NOT NULL
 );
 
 CREATE TABLE imagenes_producto (
@@ -80,39 +80,51 @@ CREATE TABLE favoritos (
 
 CREATE TABLE carritos (
     id BIGINT PRIMARY KEY,
-    usuario_id BIGINT REFERENCES usuarios(id),
-    creado_en TIMESTAMPTZ
+    usuario_id BIGINT UNIQUE NOT NULL REFERENCES usuarios(id),
+    creado_en TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE items_carrito (
     id BIGINT PRIMARY KEY,
-    carrito_id BIGINT REFERENCES carritos(id),
-    tipo_item VARCHAR(30),
+    carrito_id BIGINT NOT NULL REFERENCES carritos(id),
+    tipo_item VARCHAR(30) NOT NULL,
     variante_producto_id BIGINT REFERENCES variantes_producto(id),
     publicacion_id BIGINT REFERENCES publicaciones_usuario(id),
-    cantidad INTEGER,
-    creado_en TIMESTAMPTZ
+    cantidad INTEGER NOT NULL,
+    creado_en TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE ordenes (
     id BIGINT PRIMARY KEY,
-    usuario_id BIGINT REFERENCES usuarios(id),
-    total_clp INTEGER,
-    estado VARCHAR(20),
-    region_envio VARCHAR(80),
-    comuna_envio VARCHAR(80),
-    creado_en TIMESTAMPTZ
+    usuario_id BIGINT NOT NULL REFERENCES usuarios(id),
+    total_clp INTEGER NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    region_envio VARCHAR(80) NOT NULL,
+    comuna_envio VARCHAR(80) NOT NULL,
+    creado_en TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE items_orden (
     id BIGINT PRIMARY KEY,
-    orden_id BIGINT REFERENCES ordenes(id),
-    tipo_item VARCHAR(30),
+    orden_id BIGINT NOT NULL REFERENCES ordenes(id),
+    tipo_item VARCHAR(30) NOT NULL,
     variante_producto_id BIGINT REFERENCES variantes_producto(id),
     publicacion_id BIGINT REFERENCES publicaciones_usuario(id),
-    cantidad INTEGER,
-    precio_snapshot_clp INTEGER
+    cantidad INTEGER NOT NULL,
+    precio_snapshot_clp INTEGER NOT NULL
 );
+
+CREATE INDEX idx_usuarios_email ON usuarios(email);
+CREATE INDEX idx_productos_usuario_id ON productos(usuario_id);
+CREATE INDEX idx_productos_marca_id ON productos(marca_id);
+CREATE INDEX idx_productos_titulo ON productos(titulo);
+CREATE INDEX idx_variantes_producto_id ON variantes_producto(producto_id);
+CREATE INDEX idx_ordenes_usuario_id ON ordenes(usuario_id);
+CREATE INDEX idx_items_orden_orden_id ON items_orden(orden_id);
+CREATE INDEX idx_items_carrito_carrito_id ON items_carrito(carrito_id);
+CREATE INDEX idx_favoritos_usuario_id ON favoritos(usuario_id);
+CREATE INDEX idx_publicaciones_usuario_id ON publicaciones_usuario(usuario_id);
+CREATE INDEX idx_publicaciones_titulo ON publicaciones_usuario(titulo);
 
 INSERT INTO marcas (id, nombre) VALUES 
 (1, 'Nike'),

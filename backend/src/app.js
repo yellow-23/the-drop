@@ -8,6 +8,8 @@ const productsRoutes = require("./routes/products_routes");
 const authRoutes = require("./routes/auth_routes");
 const cartRoutes = require("./routes/cart_routes");
 const orderRoutes = require("./routes/order_routes");
+const favoritosRoutes = require("./routes/favoritos_routes");
+const publicacionesRoutes = require("./routes/publicaciones_routes");
 
 const app = express();
 
@@ -31,5 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/favorites", favoritosRoutes);
+app.use("/api/publications", publicacionesRoutes);
 
 module.exports = app;
