@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const pool = require("../db");
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || "tu_secret_key", {
+  return jwt.sign({ id }, process.env.JWT_SECRET || "secret_key_super_segura_2026", {
     expiresIn: "7d",
   });
 };
