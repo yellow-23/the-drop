@@ -97,8 +97,8 @@
   width: 100%;
   padding: 0.9rem;
   background: transparent;
-  color: #dc3545;
-  border: 2px solid #dc3545;
+  color: #810fce;
+  border: 2px solid #810fce;
   border-radius: 8px;
   font-weight: 700;
   font-size: 0.9rem;
@@ -110,7 +110,7 @@
 }
 
 .btn-clear-summary:hover {
-  background: #dc3545;
+  background: #810fce;
   color: #fff;
 }
 

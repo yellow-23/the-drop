@@ -17,15 +17,14 @@ url("../../assets/img/img-stats.jpg");
 .howitworks__title {
   font-weight: 500;
 }
-/*
+
 .howitworks__card {
-  background: #810fce ;
   border-radius: 28px;
   padding: 10px;
   text-align: center;
   height: 100%;
 }
-*/
+
 .howitworks__icon {
   width: 110px;
   height: 110px;

@@ -23,7 +23,7 @@
   font-weight: 600;
   text-decoration: none;
   color: #ffffff;
-   height: 50px;   
+  height: 50px;   
   width: auto;
   display: block;
   margin-top:0;
@@ -50,7 +50,6 @@
   border-radius: 50%;
   background: #fff;    
 }
-
 
 .nav-links a {
   text-decoration: none;
@@ -87,8 +86,8 @@
 }
 
 .mobile-menu a.active {
-  background: #f3e6ff;
-  color: #37E8D1;
+  background: #E4FF85;
+  color: #000;
 }
 
 .logout-btn {
