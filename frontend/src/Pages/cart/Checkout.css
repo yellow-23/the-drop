@@ -1,0 +1,19 @@
+.checkout-container {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkout-card {
+  padding: 3rem;
+  border-radius: 12px;
+  background: #f9f9f9;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.checkout-card h1 {
+  color: #4caf50;
+  margin-bottom: 1rem;
+}

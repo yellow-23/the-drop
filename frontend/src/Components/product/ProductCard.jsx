@@ -6,69 +6,78 @@ import { CartContext } from "../../Context/CartContext";
 
 function ProductCard({
   id,
-  image,
-  name,
-  size,
-  gender,
-  brand,
-  price,
-  condition,
+  titulo,
+  precio_clp,
+  condicion,
+  genero,
+  marca,
+  talla,
+  imagen,
+  showDelete = false,
+  onDelete,
 }) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(id);
-
   const { addToCart } = useContext(CartContext);
+
 
   return (
     <div className="product-card">
-      <button
+
+      <div className="product-card-actions">
+      {!showDelete && (
+        <button
         className={`favorite-btn ${favorite ? "active" : ""}`}
         onClick={() =>
-          toggleFavorite({ id, image, name, size, gender, brand, price, condition })
+          toggleFavorite({ id, imagen, titulo, talla, genero, marca, precio_clp, condicion })
         }
       >
         ♥
       </button>
+      )}
+      
+        {showDelete && (
+          <button
+            className="favorite-btn"
+            onClick={() => onDelete(id)}
+          >
+            X
+          </button>
+        )}
+
+      </div>
 
       <div className="product-image">
         <img
-          src={image || "/images/placeholder-shoe.png"}
-          alt={name}
+          src={imagen || "/images/placeholder-shoe.png"}
+          alt={titulo}
         />
       </div>
 
       <div className="product-info">
-        <h3 className="product-name">{name}</h3>
+        <h3 className="product-name">{titulo}</h3>
 
         <p className="product-meta">
-          Talla | {size}
+          Talla | {talla}
         </p>
 
         <p className="product-meta">
-          {gender}
+          {genero}
         </p>
 
         <p className="product-meta">
-          {brand}
+          {marca}
         </p>
 
-        <p className="product-price">${price}</p>
+        <p className="product-price">${precio_clp}</p>
       </div>
 
       <div className="product-actions">
         <button
           className="product-btn product-btn-carrito"
           onClick={() =>
-            addToCart({
-              id,
-              image,
-              name,
-              size,
-              gender,
-              brand,
-              price,
-            })
+            addToCart("publicacion", null, id, 1)
           }
         >
           AGREGAR AL CARRITO
@@ -80,6 +89,8 @@ function ProductCard({
         >
           DETALLE
         </button>
+
+        
       </div>
     </div>
   );

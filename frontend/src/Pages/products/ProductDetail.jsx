@@ -1,9 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useContext, useMemo } from 'react';
-import { getProducts } from '../../mock/Products';
-import { CartContext } from '../../Context/CartContext';
-import { useFavorites } from '../../Context/FavoritesContext';
-import './ProductDetail.css';
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import publicacionesService from "../../services/publicacionesService";
+import { CartContext } from "../../Context/CartContext";
+import { useFavorites } from "../../Context/FavoritesContext";
+import "./ProductDetail.css";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -11,19 +11,32 @@ function ProductDetail() {
   const { addToCart } = useContext(CartContext);
   const { toggleFavorite, isFavorite } = useFavorites();
 
-  const product = useMemo(() => {
-    return getProducts().find(p => p.id === parseInt(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await publicacionesService.getPublicacionById(id);
+        setProduct(data.publicacion);
+      } catch (error) {
+        console.error("Error al obtener publicación:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
   }, [id]);
 
-  const isFav = isFavorite(id);
+  if (loading) return <p>Cargando producto...</p>;
 
   if (!product) {
     return (
       <div className="product-detail-container">
         <div className="not-found">
           <h1>Producto no encontrado</h1>
-          <p>La zapatilla que buscas no existe</p>
-          <button onClick={() => navigate('/catalog')} className="btn-volver">
+          <button onClick={() => navigate("/catalog")} className="btn-volver">
             Volver al Catálogo
           </button>
         </div>
@@ -31,14 +44,20 @@ function ProductDetail() {
     );
   }
 
+  const isFav = isFavorite(product.id);
+
   const handleAddToCart = () => {
-    addToCart(product);
-    // Podemos agregar una notificación aquí después
-    alert(`${product.name} agregada al carrito!`);
+    addToCart("publicacion", null, product.id, 1);
+    alert("Producto agregado al carrito");
   };
 
   const handleToggleFavorite = () => {
-    toggleFavorite(product);
+    toggleFavorite({
+      id: product.id,
+      titulo: product.titulo,
+      precio_clp: product.precio_clp,
+      marca: product.marca,
+    });
   };
 
   return (
@@ -50,27 +69,29 @@ function ProductDetail() {
       </div>
 
       <div className="product-detail">
+        {/* IMAGEN */}
         <div className="detail-image-section">
           <div className="detail-image-container">
-            <img 
-              src={product.image} 
-              alt={product.name}
+            <img
+              src={product.imagenes?.[0] || "/images/placeholder-shoe.png"}
+              alt={product.titulo}
               className="detail-image"
             />
-            <button 
-              className={`favorite-btn-detail ${isFav ? 'active' : ''}`}
+
+            <button
+              className={`favorite-btn-detail ${isFav ? "active" : ""}`}
               onClick={handleToggleFavorite}
-              title="Agregar a favoritos"
             >
               ♥
             </button>
           </div>
         </div>
 
+        {/* INFO */}
         <div className="detail-info-section">
           <div className="detail-header">
-            <h1 className="product-title">{product.name}</h1>
-            <p className="product-brand">{product.brand}</p>
+            <h1 className="product-title">{product.titulo}</h1>
+            <p className="product-brand">{product.marca}</p>
           </div>
 
           <div className="product-rating">
@@ -79,18 +100,20 @@ function ProductDetail() {
           </div>
 
           <div className="product-price-detail">
-            <span className="price">${product.price.toLocaleString('es-CL')}</span>
+            <span className="price">
+              ${product.precio_clp.toLocaleString("es-CL")}
+            </span>
             <span className="sustainability">Sostenible</span>
           </div>
 
           <div className="product-specs">
             <div className="spec-item">
               <span className="spec-label">Talla</span>
-              <span className="spec-value">{product.size}</span>
+              <span className="spec-value">{product.talla || "—"}</span>
             </div>
             <div className="spec-item">
               <span className="spec-label">Género</span>
-              <span className="spec-value">{product.gender}</span>
+              <span className="spec-value">{product.genero}</span>
             </div>
             <div className="spec-item">
               <span className="spec-label">Disponibilidad</span>
@@ -100,32 +123,25 @@ function ProductDetail() {
 
           <div className="product-description">
             <h3>Descripción</h3>
-            <p>
-              Descubre las {product.name} de {product.brand}. Un diseño clásico y versátil que combina comodidad y estilo. 
-              Perfectas para cualquier ocasión, estas zapatillas están fabricadas con materiales sostenibles 
-              pensando en el cuidado del medio ambiente.
-            </p>
+            <p>{product.descripcion || "El vendedor no agregó descripción."}</p>
           </div>
 
           <div className="product-benefits">
             <h3>Beneficios</h3>
             <ul>
-              <li>Materiales 100% sostenibles</li>
-              <li>Comodidad garantizada</li>
-              <li>Diseño duradero</li>
-              <li>Envío gratis en compras sobre $50.000</li>
+              <li>Materiales de calidad</li>
+              <li>Producto revisado</li>
+              <li>Compra segura</li>
+              <li>Envíos a todo Chile</li>
             </ul>
           </div>
 
           <div className="detail-actions">
-            <button 
-              onClick={handleAddToCart}
-              className="btn-add-to-cart"
-            >
+            <button onClick={handleAddToCart} className="btn-add-to-cart">
               Agregar al Carrito
             </button>
-            <button 
-              onClick={() => navigate('/cart')}
+            <button
+              onClick={() => navigate("/cart")}
               className="btn-view-cart"
             >
               Ver Carrito
@@ -138,11 +154,6 @@ function ProductDetail() {
             <p>Compra 100% segura</p>
           </div>
         </div>
-      </div>
-
-      <div className="related-products-section">
-        <h2>Productos Relacionados</h2>
-        <p className="coming-soon">Próximamente más zapatillas disponibles</p>
       </div>
     </div>
   );

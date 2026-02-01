@@ -6,18 +6,19 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
-    const res = login(form.email.value, form.password.value);
-
-    if (!res.success) {
-      alert(res.message);
-      return;
+    try {
+      await login(
+        form.email.value, 
+        form.password.value);
+      navigate("/home");
     }
-
-    navigate("/profile");
+    catch (error) {
+      alert(error.message || "Error al iniciar sesión");
+    }
   };
 
   return (

@@ -1,72 +1,69 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import authService from "../services/authService";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("currentUser"))
-  );
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const register = (email, password) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const exists = users.find((u) => u.email === email);
-    if (exists) {
-      return { success: false, message: "Usuario ya existe" };
-    }
-
-    const newUser = { email, password, name: "", lastname: "",nickname:"", avatar: "", };
-    users.push(newUser);
-
-    localStorage.setItem("users", JSON.stringify(users));
-    
-
-    return { success: true };
+  const login = async (email, password) => {
+    const data = await authService.login({ email, password });
+    setUser(data.user);
+    return data;
   };
 
-  const login = (email, password) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const found = users.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (!found) {
-      return { success: false, message: "Credenciales incorrectas" };
-    }
-
-    localStorage.setItem("currentUser", JSON.stringify(found));
-    setUser(found);
-    return { success: true };
+  const register = async (userData) => {
+    const data = await authService.register(userData);
+    setUser(data.user);
+    return data;
   };
 
   const logout = () => {
-    localStorage.removeItem("currentUser");
+    authService.logout();
     setUser(null);
   };
 
-  const updateProfile = (updatedData) => {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const updateProfile = async (data) => {
+    const updateUser = await authService.updateProfile(data);
+    setUser(updateUser);
+  };
 
-  const updatedUsers = users.map((u) =>
-    u.email === user.email ? { ...u, ...updatedData } : u
-  );
+  const fetchProfile = async () => {
+    try {
+      const data = await authService.getProfile();
+      setUser(data.user || data);
+    } catch {
+      logout();
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const updatedUser = updatedUsers.find(
-    (u) => u.email === user.email
-  );
-
-  localStorage.setItem("users", JSON.stringify(updatedUsers));
-  localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-  setUser(updatedUser);
-};
-
+  useEffect(() => {
+    if (authService.isAuthenticated()) {
+      fetchProfile();
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: authService.isAuthenticated,
+        login,
+        register,
+        updateProfile,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
 export const useAuth = () => useContext(AuthContext);
+

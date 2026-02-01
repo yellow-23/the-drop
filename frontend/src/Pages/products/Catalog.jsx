@@ -1,7 +1,7 @@
 import { useState, useMemo, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../Context/CartContext';
-import { getProducts } from '../../mock/Products';
+import publicacionesService from '../../services/publicacionesService';
 import ProductCard from '../../Components/product/ProductCard';
 import './Catalog.css';
 import logo from '../../assets/img/the-drop-logo-horizontal.png';
@@ -20,32 +20,19 @@ function Catalog() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setProducts(getProducts());
+    const fetchProducts = async () => {
+    try {
+      const data = await publicacionesService.getPublicaciones();
+      setProducts(data.publicaciones);
+    } catch (error) {
+      console.error('Error cargando productos', error);
+    }
+  };
+
+  fetchProducts();
   }, []);
 
-  const productosFiltrarados = useMemo(() => {
-    let resultado = [...products];
-
-    if (filtros.marca) {
-      resultado = resultado.filter(p =>
-        p.brand.toLowerCase().includes(filtros.marca.toLowerCase())
-      );
-    }
-
-    if (filtros.precioMin) {
-      resultado = resultado.filter(p => p.price >= Number(filtros.precioMin));
-    }
-
-    if (filtros.precioMax) {
-      resultado = resultado.filter(p => p.price <= Number(filtros.precioMax));
-    }
-
-    if (filtros.talla) {
-      resultado = resultado.filter(p => p.size === filtros.talla);
-    }
-
-    return resultado;
-  }, [products, filtros]);
+  const productosFiltrados = products;
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +50,9 @@ function Catalog() {
       talla: '',
     });
   };
+
+  console.log(products);
+
 
   return (
     <div className="catalog-container">
@@ -146,21 +136,22 @@ function Catalog() {
       {/* Grid de Productos */}
       <div className="productos-section">
         <p className="resultado-count">
-          {productosFiltrarados.length} zapatillas encontradas
+          {productosFiltrados.length} zapatillas encontradas
         </p>
         
         <div className="productos-grid">
-          {productosFiltrarados.length > 0 ? (
-            productosFiltrarados.map(producto => (
+          {productosFiltrados.length > 0 ? (
+            productosFiltrados.map(producto => (
               <ProductCard
                 key={producto.id}
                 id={producto.id}
-                image={producto.image}
-                name={producto.name}
-                size={producto.size}
-                gender={producto.gender}
-                brand={producto.brand}
-                price={producto.price}
+                imagen={producto.imagenes?.[0]}
+                titulo={producto.titulo}
+                talla={producto.talla || "—"}
+                genero={producto.genero || "—"}
+                marca={producto.marca || "—"}
+                precio_clp={producto.precio_clp}
+                condicion={producto.condicion}
               />
             ))
           ) : (

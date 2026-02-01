@@ -27,7 +27,7 @@ const publicacionesService = {
 
   getUserPublicaciones: async () => {
     try {
-      const response = await api.get('/publications/user/me');
+      const response = await api.get('/publications/usuario/mis-publicaciones');
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Error al obtener tus publicaciones' };

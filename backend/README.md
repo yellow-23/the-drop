@@ -65,7 +65,7 @@ DB_PORT=5432
 DB_USER=thedrop_user
 DB_PASSWORD=admin
 DB_NAME=thedrop_db
-JWT_SECRET=tu_secret_key_super_segura_2026
+JWT_SECRET=your_jwt_secret_here
 ```
 
 ### 6. Iniciar el servidor
@@ -243,7 +243,7 @@ Authorization: Bearer <TOKEN>
 
 #### Agregar item al carrito (requiere token)
 ```http
-POST /api/cart/add
+POST /api/cart
 Authorization: Bearer <TOKEN>
 Content-Type: application/json
 

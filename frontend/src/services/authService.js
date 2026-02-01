@@ -57,10 +57,11 @@ const authService = {
   updateProfile: async (userData) => {
     try {
       const response = await api.put('/auth/profile', userData);
-      if (response.data.user) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+      const updateUser = response.data.user;
+      if (updateUser) {
+        localStorage.setItem('user', JSON.stringify(updateUser));
       }
-      return response.data;
+      return updateUser;
     } catch (error) {
       throw error.response?.data || { message: 'Error al actualizar perfil' };
     }

@@ -1,21 +1,34 @@
 import './CartItem.css';
 
 function CartItem({ item, onRemove }) {
-  const quantity = item.quantity || 1;
-  const itemTotal = item.price * quantity;
+  const quantity = item.cantidad || 1;
+  const price = Number(item.precio) || 0;
+  const itemTotal = price * quantity;
+
+  const imageUrl =
+    item.imagen ||
+    item.imagenes?.[0] ||
+    "/images/placeholder-shoe.png";
 
   return (
     <div className="cart-item">
       <div className="item-product">
-        <img src={item.image} alt={item.name} className="item-image" />
+        <img
+          src={imageUrl}
+          alt={item.titulo}
+          className="item-image"
+        />
+
         <div className="item-info">
-          <h3 className="item-name">{item.name}</h3>
-          <p className="item-meta">{item.brand} • Talla {item.size}</p>
+          <h3 className="item-name">{item.titulo}</h3>
+          <p className="item-meta">
+            {item.marca || "—"} • Talla {item.talla || "—"}
+          </p>
         </div>
       </div>
 
       <div className="item-price">
-        ${item.price.toLocaleString('es-CL')}
+        ${price.toLocaleString("es-CL")}
       </div>
 
       <div className="item-quantity">
@@ -23,11 +36,11 @@ function CartItem({ item, onRemove }) {
       </div>
 
       <div className="item-total">
-        ${itemTotal.toLocaleString('es-CL')}
+        ${itemTotal.toLocaleString("es-CL")}
       </div>
 
       <div className="item-actions">
-        <button 
+        <button
           onClick={onRemove}
           className="btn-remove"
           title="Eliminar del carrito"

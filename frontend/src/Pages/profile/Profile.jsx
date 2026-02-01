@@ -1,42 +1,88 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
+import publicacionesService from "../../services/publicacionesService";
 import ProductCard from "../../Components/product/ProductCard";
 import { useFavorites } from "../../Context/FavoritesContext";
-import { getProducts } from "../../mock/Products";
 import "../../Styles/Profile.css";
 import "../../Styles/Form.css";
 
 function Profile() {
   const [section, setSection] = useState("favorites");
-
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const { favorites } = useFavorites();
-
   const { user, updateProfile, logout } = useAuth();
+  const [myProducts, setMyProducts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+
 
   const [formData, setFormData] = useState({
       avatar: user?.avatar || "",
       nickname: user?.nickname || "",
-      name: user?.name || "",
-      lastname: user?.lastname || "",
-      email: user?.email || "",
-      password: user?.password || "",
+      nombre: user?.nombre || "",
+      apellido: user?.apellido || "",
+      region: user?.region || "",
+      comuna: user?.comuna || "",
   });
 
   const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault();
-      updateProfile(formData);
+      try {
+      await updateProfile(formData);
+      alert("Perfil actualizado con exito");
+      }
+      catch (error) {
+          console.error(error);
+          alert(error.message || "Error al actualizar el perfil");
+      }
   };
 
-  const myProducts = getProducts().filter(
-  (p) => p.owner === user?.email
-);
+  const handleDeletePost = async (id) => {
+  const confirmDelete = window.confirm(
+    "¿Seguro que deseas eliminar esta publicación?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await publicacionesService.deletePublicacion(id);
+    setMyProducts(prev => prev.filter(p => p.id !== id));
+    alert("Publicación eliminada");
+  } catch (error) {
+    console.error(error);
+    alert("Error al eliminar la publicación");
+  }
+};
+
+  const displayName = 
+  user?.nickname 
+  ? user.nickname
+  : user?.nombre || user?.apellido
+  ? `${user.nombre || ""} ${user.apellido || ""}`
+  : user?.email
+
+ useEffect(() => {
+  if (!user) return;
+
+  const fetchMyProducts = async () => {
+    try {
+      setLoadingPosts(true);
+      const data = await publicacionesService.getUserPublicaciones();
+      setMyProducts(data.publicaciones);
+    } catch (error) {
+      console.error("Error al cargar mis publicaciones", error);
+    } finally {
+      setLoadingPosts(false);
+    }
+  };
+
+  fetchMyProducts();
+}, [user]);
+
 
 
   return (
@@ -51,9 +97,7 @@ function Profile() {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}/>
-            <p>{user?.nickname ||
-    `${user?.name || ""} ${user?.lastname || ""}`.trim() ||
-    user?.email}</p>
+            <p>{displayName}</p>
           </div>
 
           <button className="btn btn-light w-100 mb-3" onClick={() => navigate("/create-product")}>
@@ -94,8 +138,10 @@ function Profile() {
           </nav>
         </aside>
 
-        {/* CONTENIDO */}
-        <main className="col-12 col-md-9 profile-content">
+  {/* CONTENIDO */}
+    <main className="col-12 col-md-9 profile-content">
+
+        {/* FAVORITOS */}
           {section === "favorites" && (
   <>
     <h3>Mis favoritos</h3>
@@ -108,25 +154,40 @@ function Profile() {
       <div className="row g-3 justify-content-center">
         {favorites.map((p) => (
           <div key={p.id} className="col-12 col-sm-6 col-lg-4">
-            <ProductCard {...p} />
+            <ProductCard 
+            {...p} />
           </div>
         ))}
       </div>
     )}
   </>
 )}
+
+      {/* MIS PUBLICACIONES */}
        {section === "posts" && (
   <>
     <h3>Mis publicaciones</h3>
     <div className="profile-divider"></div>
 
-    {myProducts.length === 0 ? (
+    {loadingPosts ? (
+      <p>Cargando publicaciones...</p>
+    ) : myProducts.length === 0 ? (
       <p>No has publicado productos aún</p>
     ) : (
       <div className="row g-3 justify-content-center">
         {myProducts.map((p) => (
           <div key={p.id} className="col-12 col-sm-6 col-lg-4">
-            <ProductCard key={p.id} {...p} showDelete />
+            <ProductCard 
+            id={p.id}
+            titulo={p.titulo}
+            precio_clp={p.precio_clp}
+            condicion={p.condicion}
+            genero={p.genero}
+            marca={p.marca}
+            talla={p.talla}
+            imagen={p.imagenes?.[0]}
+            showDelete
+            onDelete={handleDeletePost} />
           </div>
         ))}
       </div>
@@ -134,6 +195,7 @@ function Profile() {
   </>
 )}
 
+      {/* EDITAR PERFIL */}
           {section === "edit" && (
   <>
     <h3>Editar perfil</h3>
@@ -167,8 +229,8 @@ function Profile() {
           <div className="form-field">
             <label>Nombre</label>
             <input
-              name="name"
-              value={formData.name}
+              name="nombre"
+              value={formData.nombre}
               onChange={handleChange}
               placeholder="Nombre"
             />
@@ -177,27 +239,33 @@ function Profile() {
           <div className="form-field">
             <label>Apellido</label>
             <input
-              name="lastname"
-              value={formData.lastname}
+              name="apellido"
+              value={formData.apellido}
               onChange={handleChange}
               placeholder="Apellido"
             />
           </div>
 
           <div className="form-field">
-            <label>Email</label>
-            <input value={formData.email} disabled />
+            <label>Región</label>
+            <input
+              name="region"
+              value={formData.region}
+              onChange={handleChange}
+              placeholder="Región"
+            />
           </div>
 
           <div className="form-field">
-            <label>Contraseña</label>
+            <label>Comuna</label>
             <input
-              type="password"
-              name="password"
-              value={formData.password}
+              name="comuna"
+              value={formData.comuna}
               onChange={handleChange}
+              placeholder="Comuna"
             />
           </div>
+
 
           <button className="form-button">
             Guardar cambios

@@ -8,6 +8,7 @@ exports.getPublicaciones = async (req, res) => {
       SELECT 
         pu.id,
         pu.titulo,
+        pu.genero,
         pu.modelo,
         pu.condicion,
         pu.precio_clp,
@@ -21,7 +22,15 @@ exports.getPublicaciones = async (req, res) => {
         tc.talla_cl as talla,
         u.nombre as usuario,
         u.reputacion,
-        pu.creado_en
+        pu.creado_en,
+        COALESCE(
+  (
+    SELECT json_agg(ip.url_imagen)
+    FROM imagenes_publicacion_usuario ip
+    WHERE ip.publicacion_id = pu.id
+  ),
+  '[]'::json
+) AS imagenes
       FROM publicaciones_usuario pu
       LEFT JOIN marcas m ON pu.marca_id = m.id
       LEFT JOIN tallas_cl tc ON pu.talla_id = tc.id
@@ -34,7 +43,7 @@ exports.getPublicaciones = async (req, res) => {
     let paramCount = 1;
 
     if (search) {
-      conditions.push(`(pu.titulo ILIKE $${paramCount} OR pu.modelo ILIKE $${paramCount} OR pu.descripcion ILIKE $${paramCount})`);
+      conditions.push(`(pu.titulo ILIKE $${paramCount} OR pu.modelo ILIKE $${paramCount} OR pu.descripcion ILIKE $${paramCount} OR pu.genero ILIKE $${paramCount})`);
       params.push(`%${search}%`);
       paramCount++;
     }
@@ -94,6 +103,7 @@ exports.getPublicacionById = async (req, res) => {
       `SELECT 
         pu.id,
         pu.titulo,
+        pu.genero,
         pu.modelo,
         pu.condicion,
         pu.precio_clp,
@@ -109,8 +119,8 @@ exports.getPublicacionById = async (req, res) => {
         u.nombre as usuario,
         u.reputacion,
         (SELECT json_agg(url_imagen)
-         FROM imagenes_publicacion_usuario
-         WHERE publicacion_id = pu.id) as imagenes,
+         FROM imagenes_publicacion_usuario ip
+         WHERE ip.publicacion_id = pu.id) as imagenes,
         pu.creado_en
        FROM publicaciones_usuario pu
        LEFT JOIN marcas m ON pu.marca_id = m.id
@@ -144,24 +154,75 @@ exports.getPublicacionById = async (req, res) => {
 exports.createPublicacion = async (req, res) => {
   try {
     const userId = req.userId;
-    const { titulo, modelo, condicion, precio_clp, descripcion, region, comuna, marca_id, talla_id, tipo_entrega } = req.body;
+    const {
+      titulo,
+      genero,
+      condicion,
+      precio_clp,
+      descripcion,
+      region,
+      comuna,
+      marca_id,
+      talla_id,
+      tipo_entrega,
+      imagen_url,
+    } = req.body;
 
-    if (!titulo || !modelo || !precio_clp) {
+    if (!titulo || !precio_clp) {
       return res.status(400).json({
         ok: false,
-        message: "Título, modelo y precio son requeridos",
+        message: "Título y precio son requeridos",
       });
     }
 
-    const publicacionId = Date.now();
-
     const result = await pool.query(
-      `INSERT INTO publicaciones_usuario (id, usuario_id, marca_id, talla_id, titulo, modelo, condicion, precio_clp, descripcion, estado, region, comuna, tipo_entrega, creado_en)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-       RETURNING *`,
-      [publicacionId, userId, marca_id || null, talla_id || null, titulo, modelo, condicion || "sin especificar", precio_clp, descripcion || null, "activa", region || null, comuna || null, tipo_entrega || null, new Date()]
+      `INSERT INTO publicaciones_usuario (
+        usuario_id,
+        marca_id,
+        talla_id,
+        titulo,
+        genero,
+        condicion,
+        precio_clp,
+        descripcion,
+        estado,
+        region,
+        comuna,
+        tipo_entrega,
+        creado_en
+      )
+      VALUES (
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13
+      )
+      RETURNING *`,
+      [
+        userId,
+        marca_id || null,
+        talla_id || null,
+        titulo,
+        genero,
+        condicion || "sin especificar",
+        precio_clp,
+        descripcion || null,
+        "activa",
+        region || null,
+        comuna || null,
+        tipo_entrega || null,
+        new Date()
+      ]
     );
 
+    const nuevaPublicacionId = result.rows[0].id;
+
+    if (imagen_url && imagen_url.trim() !== "") {
+      await pool.query(
+        "INSERT INTO imagenes_publicacion_usuario (publicacion_id, url_imagen) VALUES ($1, $2)",
+        [nuevaPublicacionId, imagen_url]
+      );
+    }
+
+    console.log("IMAGEN_URL RECIBIDA:", imagen_url);
+    
     res.status(201).json({
       ok: true,
       message: "Publicación creada",
@@ -181,7 +242,7 @@ exports.updatePublicacion = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.userId;
-    const { titulo, modelo, condicion, precio_clp, descripcion, region, comuna, tipo_entrega } = req.body;
+    const { titulo, condicion, precio_clp, descripcion, region, comuna, tipo_entrega } = req.body;
 
     const ownerCheck = await pool.query(
       "SELECT usuario_id FROM publicaciones_usuario WHERE id = $1",
@@ -205,16 +266,15 @@ exports.updatePublicacion = async (req, res) => {
     const result = await pool.query(
       `UPDATE publicaciones_usuario 
        SET titulo = COALESCE($2, titulo),
-           modelo = COALESCE($3, modelo),
-           condicion = COALESCE($4, condicion),
-           precio_clp = COALESCE($5, precio_clp),
-           descripcion = COALESCE($6, descripcion),
-           region = COALESCE($7, region),
-           comuna = COALESCE($8, comuna),
-           tipo_entrega = COALESCE($9, tipo_entrega)
+           condicion = COALESCE($3, condicion),
+           precio_clp = COALESCE($4, precio_clp),
+           descripcion = COALESCE($5, descripcion),
+           region = COALESCE($6, region),
+           comuna = COALESCE($7, comuna),
+           tipo_entrega = COALESCE($8, tipo_entrega)
        WHERE id = $1
        RETURNING *`,
-      [id, titulo, modelo, condicion, precio_clp, descripcion, region, comuna, tipo_entrega]
+      [id, titulo, condicion, precio_clp, descripcion, region, comuna, tipo_entrega]
     );
 
     res.json({
@@ -281,15 +341,29 @@ exports.getPublicacionesUsuario = async (req, res) => {
 
     const result = await pool.query(
       `SELECT 
-        id,
-        titulo,
-        modelo,
-        precio_clp,
-        estado,
-        creado_en
-       FROM publicaciones_usuario
-       WHERE usuario_id = $1
-       ORDER BY creado_en DESC`,
+        pu.id,
+        pu.titulo,
+        pu.genero,
+        pu.condicion,
+        pu.precio_clp,
+        pu.estado,
+        pu.creado_en,
+        m.nombre AS marca,
+        tc.talla_cl AS talla,
+        COALESCE(
+          (
+            SELECT json_agg(ip.url_imagen)
+            FROM imagenes_publicacion_usuario ip
+            WHERE ip.publicacion_id = pu.id
+          ),
+          '[]'::json
+        ) AS imagenes
+      FROM publicaciones_usuario pu
+      LEFT JOIN marcas m ON pu.marca_id = m.id
+      LEFT JOIN tallas_cl tc ON pu.talla_id = tc.id
+      WHERE pu.usuario_id = $1
+      AND pu.estado = 'activa'
+      ORDER BY pu.creado_en DESC`,
       [userId]
     );
 
@@ -301,8 +375,9 @@ exports.getPublicacionesUsuario = async (req, res) => {
     console.error("Error en getPublicacionesUsuario:", error);
     res.status(500).json({
       ok: false,
-      message: "Error al obtener publicaciones",
+      message: "Error al obtener publicaciones del usuario",
       error: error.message,
     });
   }
 };
+

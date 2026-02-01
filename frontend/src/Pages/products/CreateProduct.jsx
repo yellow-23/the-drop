@@ -1,19 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Components/product/ProductCard";
-import { addProduct } from "../../mock/Products";
+import publicacionesService from "../../services/publicacionesService";
+import brandService from "../../services/brandService";
+import sizeService from "../../services/sizeService";
 import { useAuth } from "../../Context/AuthContext";
 import "../../Styles/Form.css";
 
 const emptyProduct = {
-  name: "",
-  brand: "",
-  size: "",
-  gender: "",
-  condition: "Nuevo",
-  price: "",
-  image: "",
-  description: "",
+  titulo: "",
+  descripcion: "",
+  precio_clp: "",
+  condicion: "Usado",
+  genero: "",
+  marca_id: "",
+  talla_id: "",
+  imagen_url: "",
 };
 
 function CreateProduct() {
@@ -21,6 +23,24 @@ function CreateProduct() {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState(emptyProduct);
+  const [brands, setBrands] = useState([]);
+  const [sizes, setSizes] = useState([]);
+
+  useEffect(() => {
+  const loadData = async () => {
+    try {
+      const brandsRes = await brandService.getBrands();
+      const sizesRes = await sizeService.getSizes();
+
+      setBrands(brandsRes);
+      setSizes(sizesRes);
+    } catch (error) {
+      console.error("Error cargando marcas o tallas", error);
+    }
+  };
+
+  loadData();
+}, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -29,7 +49,7 @@ function CreateProduct() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!user) {
@@ -37,18 +57,30 @@ function CreateProduct() {
       return;
     }
 
-    const newProduct = {
-      id: Date.now(),
-      ...formData,
-      price: Number(formData.price),
-      owner: user.email,
-    };
+    try {
+      const payload = {
+  titulo: formData.titulo,
+  descripcion: formData.descripcion,
+  precio_clp: Number(formData.precio_clp),
+  condicion: formData.condicion,
+  genero: formData.genero,
+  marca_id: formData.marca_id,
+  talla_id: formData.talla_id,
+  imagen_url: formData.imagen_url,
+};
 
-    addProduct(newProduct);
-    alert("Producto publicado");
-    navigate(`/product/${newProduct.id}`);
-
+      const response = await publicacionesService.createPublicacion(payload);
+      
+      alert("Producto publicado con exito");
+      navigate(`/publications/${response.publicacion.id}`);
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Error al publicar el producto");
+    }
   };
+
+  const selectedBrand = brands.find(b => b.id === Number(formData.marca_id));
+  const selectedSize = sizes.find(t => t.id === Number(formData.talla_id));
 
   return (
     <div className="container product-create">
@@ -63,22 +95,46 @@ function CreateProduct() {
 
             <div className="form-field">
               <label>Nombre</label>
-              <input name="name" value={formData.name} onChange={handleChange} />
+              <input name="titulo" value={formData.titulo} onChange={handleChange} />
             </div>
 
             <div className="form-field">
-              <label>Marca</label>
-              <input name="brand" value={formData.brand} onChange={handleChange} />
-            </div>
+            <label>Marca</label>
+            <select
+             name="marca_id"
+             value={formData.marca_id}
+             onChange={handleChange}
+            required
+            >
+          <option value="">Seleccionar marca</option>
+           {brands.map((m) => (
+          <option key={m.id} value={m.id}>
+          {m.nombre}
+        </option>
+         ))}
+        </select>
+        </div>
 
-            <div className="form-field">
-              <label>Talla</label>
-              <input name="size" value={formData.size} onChange={handleChange} />
-            </div>
+          <div className="form-field">
+            <label>Talla (CL)</label>
+            <select
+            name="talla_id"
+            value={formData.talla_id}
+            onChange={handleChange}
+            required
+            >
+              <option value="">Seleccionar talla</option>
+                  {sizes.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.talla_cl}
+              </option>
+               ))}
+          </select>
+          </div>
 
             <div className="form-field">
               <label>Género</label>
-              <select name="gender" value={formData.gender} onChange={handleChange}>
+              <select name="genero" value={formData.genero} onChange={handleChange}>
                 <option value="">Seleccionar</option>
                 <option>Hombre</option>
                 <option>Mujer</option>
@@ -89,8 +145,8 @@ function CreateProduct() {
             <div className="form-field">
               <label>Estado</label>
               <select
-                name="condition"
-                value={formData.condition}
+                name="condicion"
+                value={formData.condicion}
                 onChange={handleChange}
               >
                 <option>Nuevo</option>
@@ -102,8 +158,8 @@ function CreateProduct() {
               <label>Precio</label>
               <input
                 type="number"
-                name="price"
-                value={formData.price}
+                name="precio_clp"
+                value={formData.precio_clp}
                 onChange={handleChange}
               />
             </div>
@@ -111,19 +167,19 @@ function CreateProduct() {
             <div className="form-field">
               <label>Imagen (URL)</label>
               <input
-                name="image"
-                value={formData.image}
+                name="imagen_url"
+                value={formData.imagen_url}
                 onChange={handleChange}
-                placeholder="/img/shoe.png"
+                placeholder="https://..."
               />
             </div>
 
             <div className="form-field">
               <label>Descripción</label>
               <textarea
-                name="description"
+                name="descripcion"
                 rows="3"
-                value={formData.description}
+                value={formData.descripcion}
                 onChange={handleChange}
               />
             </div>
@@ -138,8 +194,13 @@ function CreateProduct() {
 
           <ProductCard
             {...formData}
-            price={formData.price || 0}
-            image={formData.image || "/img/shoe.png"}
+            titulo={formData.titulo}
+            genero={formData.genero}
+            condicion={formData.condicion}
+            precio_clp={formData.precio_clp || 0}
+            marca={selectedBrand?.nombre}
+            talla={selectedSize?.talla_cl}
+            imagen={formData.imagen_url || "/img/shoe.png"}
           />
         </div>
       </div>

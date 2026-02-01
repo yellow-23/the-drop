@@ -6,26 +6,21 @@ function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const form = e.target;
 
-    const userData = {
-      name: form.name.value,
-      lastName: form.lastName.value,
-      email: form.email.value,
-      password: form.password.value,
-    };
-
-    const res = register(userData.email, userData.password);
-
-    if (!res.success) {
-      alert(res.message);
-      return;
+    try {
+      await register({
+        nombre: form.name.value,
+        apellido: form.lastName.value,
+        email: form.email.value,
+        password: form.password.value,
+     });
+      navigate("/login");
+    } catch (error) {
+      alert(error.message || "Error al crear la cuenta");
     }
-
-    navigate("/login");
   };
 
   return (

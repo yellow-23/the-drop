@@ -1,9 +1,11 @@
 import './CartSummary.css';
+import { useNavigate } from 'react-router-dom';
 
 function CartSummary({ total, itemCount, onClear }) {
   const subtotal = total;
   const envio = total > 50000 ? 0 : 5000;
   const totalFinal = subtotal + envio;
+  const navigate = useNavigate();
 
   return (
     <div className="cart-summary">
@@ -34,7 +36,8 @@ function CartSummary({ total, itemCount, onClear }) {
         <span className="amount">${totalFinal.toLocaleString('es-CL')}</span>
       </div>
 
-      <button className="btn-checkout">
+      <button className="btn-checkout"
+      onClick={() => navigate("/checkout")}>
         Ir al Checkout
       </button>
 

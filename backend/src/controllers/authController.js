@@ -10,17 +10,17 @@ const generateToken = (id) => {
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, nombre, region, comuna } = req.body;
+    const { email, password, nombre, apellido } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !nombre || !apellido) {
       return res.status(400).json({
         ok: false,
-        message: "Email y contraseña requeridos",
+        message: "Datos incompletos",
       });
     }
 
     const existingUser = await pool.query(
-      "SELECT * FROM usuarios WHERE email = $1",
+      "SELECT id FROM usuarios WHERE email = $1",
       [email]
     );
 
@@ -32,30 +32,30 @@ exports.register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = Date.now();
 
-    const newUser = await pool.query(
-      "INSERT INTO usuarios (id, email, password_hash, nombre, region, comuna, reputacion, creado_en) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, email, nombre",
-      [userId, email, hashedPassword, nombre || null, region || null, comuna || null, 5.0, new Date()]
+    const result = await pool.query(
+      `INSERT INTO usuarios (email, password_hash, nombre, apellido, reputacion)
+       VALUES ($1, $2, $3, $4, 5.0)
+       RETURNING id, email, nombre, apellido, nickname, region, comuna, avatar`,
+      [email, hashedPassword, nombre, apellido]
     );
 
-    const token = generateToken(newUser.rows[0].id);
+    const user = result.rows[0];
+    const token = generateToken(user.id);
 
     res.status(201).json({
       ok: true,
-      message: "Usuario registrado exitosamente",
-      user: newUser.rows[0],
+      user,
       token,
     });
   } catch (error) {
-    console.error("Error en register:", error);
     res.status(500).json({
       ok: false,
       message: "Error al registrar usuario",
-      error: error.message,
     });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
@@ -99,6 +99,8 @@ exports.login = async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
+        apellido: user.apellido,
+        nickname: user.nickname,
         region: user.region,
         comuna: user.comuna,
         avatar: user.avatar,
@@ -120,7 +122,7 @@ exports.getProfile = async (req, res) => {
     const userId = req.userId;
 
     const userResult = await pool.query(
-      "SELECT id, email, nombre, region, comuna, reputacion, avatar, creado_en FROM usuarios WHERE id = $1",
+      "SELECT id, email, nombre, apellido, nickname, region, comuna, reputacion, avatar, creado_en FROM usuarios WHERE id = $1",
       [userId]
     );
 
@@ -148,17 +150,19 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    const { nombre, region, comuna, avatar } = req.body;
+    const { nombre, apellido, nickname, region, comuna, avatar } = req.body;
 
     const result = await pool.query(
-      `UPDATE usuarios 
-       SET nombre = COALESCE($2, nombre),
-           region = COALESCE($3, region),
-           comuna = COALESCE($4, comuna),
-           avatar = COALESCE($5, avatar)
+      `UPDATE usuarios
+       SET nombre   = COALESCE($2, nombre),
+           apellido = COALESCE($3, apellido),
+           nickname = COALESCE($4, nickname),
+           region   = COALESCE($5, region),
+           comuna   = COALESCE($6, comuna),
+           avatar   = COALESCE($7, avatar)
        WHERE id = $1
-       RETURNING id, email, nombre, region, comuna, reputacion, avatar`,
-      [userId, nombre, region, comuna, avatar]
+       RETURNING id, email, nombre, apellido, nickname, region, comuna, avatar`,
+      [userId, nombre, apellido, nickname, region, comuna, avatar]
     );
 
     if (result.rows.length === 0) {
@@ -170,15 +174,12 @@ exports.updateProfile = async (req, res) => {
 
     res.json({
       ok: true,
-      message: "Perfil actualizado",
       user: result.rows[0],
     });
   } catch (error) {
-    console.error("Error en updateProfile:", error);
     res.status(500).json({
       ok: false,
       message: "Error al actualizar perfil",
-      error: error.message,
     });
   }
 };

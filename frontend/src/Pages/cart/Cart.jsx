@@ -3,14 +3,20 @@ import { Link } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import CartItem from "../../Components/product/CartItem";
 import CartSummary from "../../Components/product/CartSummary";
-import './Cart.css';
+import "./Cart.css";
 
 function Cart() {
-  const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+  const {
+    items,
+    total,
+    itemCount,
+    removeFromCart,
+    clearCart
+  } = useContext(CartContext);
 
-  const total = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+  const safeItems = Array.isArray(items) ? items : [];
 
-  if (cartItems.length === 0) {
+  if (safeItems.length === 0) {
     return (
       <div className="cart-container empty-cart">
         <div className="empty-content">
@@ -28,7 +34,7 @@ function Cart() {
     <div className="cart-container">
       <div className="cart-header">
         <h1>Carrito de Compras</h1>
-        <p className="item-count">{cartItems.length} artículos</p>
+        <p className="item-count">{itemCount} artículos</p>
       </div>
 
       <div className="cart-content">
@@ -41,18 +47,18 @@ function Cart() {
             <span className="col-acciones">Acciones</span>
           </div>
 
-          {cartItems.map((item) => (
-            <CartItem 
-              key={item.id} 
+          {safeItems.map((item) => (
+            <CartItem
+              key={item.id}
               item={item}
               onRemove={() => removeFromCart(item.id)}
             />
           ))}
         </div>
 
-        <CartSummary 
+        <CartSummary
           total={total}
-          itemCount={cartItems.length}
+          itemCount={itemCount}
           onClear={clearCart}
         />
       </div>
@@ -70,3 +76,4 @@ function Cart() {
 }
 
 export default Cart;
+

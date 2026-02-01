@@ -12,8 +12,8 @@ exports.getCart = async (req, res) => {
     let carroId;
     if (cartResult.rows.length === 0) {
       const newCartResult = await pool.query(
-        "INSERT INTO carritos (id, usuario_id, creado_en) VALUES ($1, $2, $3) RETURNING id",
-        [Date.now(), userId, new Date()]
+        "INSERT INTO carritos (usuario_id, creado_en) VALUES ($1, $2) RETURNING id",
+        [userId, new Date()]
       );
       carroId = newCartResult.rows[0].id;
     } else {
@@ -25,23 +25,40 @@ exports.getCart = async (req, res) => {
         ic.id,
         ic.tipo_item,
         ic.cantidad,
+
         CASE 
           WHEN ic.tipo_item = 'producto' THEN vp.precio_clp
           WHEN ic.tipo_item = 'publicacion' THEN pu.precio_clp
-        END as precio,
+        END AS precio,
+
         CASE 
           WHEN ic.tipo_item = 'producto' THEN p.titulo
           WHEN ic.tipo_item = 'publicacion' THEN pu.titulo
-        END as titulo,
+        END AS titulo,
+
         CASE 
           WHEN ic.tipo_item = 'producto' THEN ic.variante_producto_id
           WHEN ic.tipo_item = 'publicacion' THEN ic.publicacion_id
-        END as item_id
+        END AS item_id,
+
+        CASE 
+          WHEN ic.tipo_item = 'publicacion' THEN img.url_imagen
+          ELSE NULL
+        END AS imagen
+
       FROM items_carrito ic
       LEFT JOIN variantes_producto vp ON ic.variante_producto_id = vp.id
       LEFT JOIN productos p ON vp.producto_id = p.id
       LEFT JOIN publicaciones_usuario pu ON ic.publicacion_id = pu.id
-      WHERE ic.carrito_id = $1
+      LEFT JOIN LATERAL (
+        SELECT url_imagen
+        FROM imagenes_publicacion_usuario
+        WHERE publicacion_id = pu.id
+        ORDER BY id ASC
+        LIMIT 1
+      ) img ON ic.tipo_item = 'publicacion'
+      WHERE ic.carrito_id = $1;
+
     `, [carroId]);
 
     const total = itemsResult.rows.reduce((sum, item) => {
@@ -98,8 +115,8 @@ exports.addToCart = async (req, res) => {
 
     if (carroId.rows.length === 0) {
       const newCart = await pool.query(
-        "INSERT INTO carritos (id, usuario_id, creado_en) VALUES ($1, $2, $3) RETURNING id",
-        [Date.now(), userId, new Date()]
+        "INSERT INTO carritos (usuario_id, creado_en) VALUES ($1, $2) RETURNING id",
+        [userId, new Date()]
       );
       carroId = newCart.rows[0].id;
     } else {
@@ -109,7 +126,10 @@ exports.addToCart = async (req, res) => {
     const existingItem = await pool.query(
       `SELECT * FROM items_carrito 
        WHERE carrito_id = $1 AND tipo_item = $2 
-       AND (variante_producto_id = $3 OR publicacion_id = $4)`,
+       AND (
+       (tipo_item = 'producto' AND variante_producto_id = $3)
+        OR
+      (tipo_item = 'publicacion' AND publicacion_id = $4))`,
       [carroId, tipo_item, variante_producto_id || null, publicacion_id || null]
     );
 
@@ -127,10 +147,10 @@ exports.addToCart = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO items_carrito (id, carrito_id, tipo_item, variante_producto_id, publicacion_id, cantidad, creado_en)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO items_carrito (carrito_id, tipo_item, variante_producto_id, publicacion_id, cantidad, creado_en)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [Date.now(), carroId, tipo_item, variante_producto_id || null, publicacion_id || null, cantidad, new Date()]
+      [carroId, tipo_item, variante_producto_id || null, publicacion_id || null, cantidad, new Date()]
     );
 
     res.status(201).json({

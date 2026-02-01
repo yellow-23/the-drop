@@ -19,7 +19,7 @@ const cartService = {
       if (varianteProductoId) payload.variante_producto_id = varianteProductoId;
       if (publicacionId) payload.publicacion_id = publicacionId;
 
-      const response = await api.post('/cart', payload);
+      const response = await api.post('/cart/add', payload);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Error al agregar al carrito' };
