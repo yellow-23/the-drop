@@ -1,6 +1,7 @@
 import "../../Styles/Auth.css";
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../Components/layout/Footer";
 
 function Register() {
   const { register } = useAuth();
@@ -24,6 +25,7 @@ function Register() {
   };
 
   return (
+    <main>
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Crear cuenta</h2>
@@ -65,6 +67,8 @@ function Register() {
         </p>
       </form>
     </div>
+    <Footer />
+    </main>
   );
 }
 

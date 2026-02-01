@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import CartItem from "../../Components/product/CartItem";
 import CartSummary from "../../Components/product/CartSummary";
+import Footer from "../../Components/layout/Footer";
 import "./Cart.css";
 
 function Cart() {
@@ -18,6 +19,7 @@ function Cart() {
 
   if (safeItems.length === 0) {
     return (
+      <main>
       <div className="cart-container empty-cart">
         <div className="empty-content">
           <h1>Tu carrito está vacío</h1>
@@ -27,10 +29,13 @@ function Cart() {
           </Link>
         </div>
       </div>
+      <Footer />
+      </main>
     );
   }
 
   return (
+    <main>
     <div className="cart-container">
       <div className="cart-header">
         <h1>Carrito de Compras</h1>
@@ -71,8 +76,12 @@ function Cart() {
           Vaciar Carrito
         </button>
       </div>
+      
     </div>
+    <Footer />
+    </main>
   );
+  
 }
 
 export default Cart;

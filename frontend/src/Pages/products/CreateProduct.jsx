@@ -5,7 +5,8 @@ import publicacionesService from "../../services/publicacionesService";
 import brandService from "../../services/brandService";
 import sizeService from "../../services/sizeService";
 import { useAuth } from "../../Context/AuthContext";
-import "../../Styles/Form.css";
+import "./CreateProduct.css";
+import Footer from "../../Components/layout/Footer";
 
 const emptyProduct = {
   titulo: "",
@@ -83,13 +84,14 @@ function CreateProduct() {
   const selectedSize = sizes.find(t => t.id === Number(formData.talla_id));
 
   return (
+    <main>
     <div className="container product-create">
       <h3>Publicar producto</h3>
       <div className="profile-divider"></div>
 
-      <div className="row justify-content-center align-items-start">
+      <div className="content">
         {/* FORM */}
-        <div className="col-12 col-md-6">
+        <div className="form">
           <form className="form-card" onSubmit={handleSubmit}>
             <h2 className="form-title">Datos del producto</h2>
 
@@ -189,7 +191,7 @@ function CreateProduct() {
         </div>
 
         {/* PREVIEW */}
-        <div className="col-12 col-md-5">
+        <div className="preview">
           <h2 className="form-title text-center">Vista previa</h2>
 
           <ProductCard
@@ -205,6 +207,8 @@ function CreateProduct() {
         </div>
       </div>
     </div>
+    <Footer />
+    </main>
   );
 }
 

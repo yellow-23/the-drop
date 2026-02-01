@@ -33,6 +33,8 @@ export default function HeroCTA() {
        Comprar
       </Button>
       <Button
+      as={NavLink}
+       to="/create-product"
        size="lg"
        className="button-cta-hero button-cta-hero_variant rounded-pill px-6"
       >

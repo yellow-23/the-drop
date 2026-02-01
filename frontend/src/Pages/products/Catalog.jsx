@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../Context/CartContext';
 import publicacionesService from '../../services/publicacionesService';
 import ProductCard from '../../Components/product/ProductCard';
+import Footer from '../../Components/layout/Footer';
 import './Catalog.css';
 import logo from '../../assets/img/the-drop-logo-horizontal.png';
 import { BsCart3 } from 'react-icons/bs';
@@ -55,6 +56,7 @@ function Catalog() {
 
 
   return (
+    <main>
     <div className="catalog-container">
       <div className="catalog-header">
         <img src={logo} alt="The Drop" className="catalog-logo" />
@@ -172,6 +174,8 @@ function Catalog() {
         )}
       </button>
     </div>
+    <Footer />
+    </main>
   );
 }
 

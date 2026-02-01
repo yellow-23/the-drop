@@ -13,7 +13,7 @@ export default function Footer() {
             <h6 className="text-uppercase mb-3">Menú</h6>
             <Nav className="flex-column gap-2 align-items-center align-items-md-start">
               <Nav.Link href="/" className="p-0 text-muted">Home</Nav.Link>
-              <Nav.Link href="/catalog" className="p-0 text-muted">Galería</Nav.Link>
+              <Nav.Link href="/catalog" className="p-0 text-muted">Catálogo</Nav.Link>
               <Nav.Link href="/login" className="p-0 text-muted">Login</Nav.Link>
               <Nav.Link href="/register" className="p-0 text-muted">Registro</Nav.Link>
             </Nav>

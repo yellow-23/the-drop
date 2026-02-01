@@ -30,13 +30,27 @@ h2 {
 }
 
 .form-button {
-  background: #e8374e;
-  color: #fff;
+ padding: 1.1rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #810fce 0%, #6a0dad 100%);
   border: none;
-  padding: 12px;
-  width: 70%;
-  border-radius: 4px;
+  color: #fff;
   cursor: pointer;
-  display: block;
-  margin: 24px auto 0;;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 60%;
+}
+
+.form-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 15, 206, 0.3);
 }

@@ -100,11 +100,11 @@ function Profile() {
             <p>{displayName}</p>
           </div>
 
-          <button className="btn btn-light w-100 mb-3" onClick={() => navigate("/create-product")}>
+          <button className="btn-profile" onClick={() => navigate("/create-product")}>
             Crear publicación
           </button>
 
-          <button className="btn btn-outline-light w-100 mb-4" onClick={logout}>
+          <button className="btn-profile-logout" onClick={logout}>
             Cerrar sesión
           </button>
 
@@ -116,7 +116,7 @@ function Profile() {
               Mis favoritos
             </button>
 
-            <div className="profile-divider">
+            <div className="profile-sidebar-divider">
             </div>
 
             <button
@@ -126,7 +126,7 @@ function Profile() {
               Mis publicaciones
             </button>
             
-             <div className="profile-divider">
+             <div className="profile-sidebar-divider">
             </div>
 
             <button
@@ -151,7 +151,7 @@ function Profile() {
     {favorites.length === 0 ? (
       <p>No tienes productos en favoritos aún</p>
     ) : (
-      <div className="row g-3 justify-content-center">
+      <div className="contenido">
         {favorites.map((p) => (
           <div key={p.id} className="col-12 col-sm-6 col-lg-4">
             <ProductCard 
@@ -174,7 +174,7 @@ function Profile() {
     ) : myProducts.length === 0 ? (
       <p>No has publicado productos aún</p>
     ) : (
-      <div className="row g-3 justify-content-center">
+      <div className="contenido">
         {myProducts.map((p) => (
           <div key={p.id} className="col-12 col-sm-6 col-lg-4">
             <ProductCard 
@@ -201,7 +201,7 @@ function Profile() {
     <h3>Editar perfil</h3>
     <div className="profile-divider"></div>
 
-    <div className="row justify-content-center">
+    <div className="contenido">
       <div className="col-12 col-md-8 col-lg-6">
         <form className="form-card" onSubmit={handleSubmit}>
           <h2>Actualiza tus datos</h2>
@@ -275,9 +275,15 @@ function Profile() {
     </div>
   </>
 )}
+    <footer>
+      <div className="text-center text-muted">
+          <small>© {new Date().getFullYear()} The Drop</small>
+        </div>
+    </footer>
         </main>
       </div>
     </div>
+    
   );
 }
 

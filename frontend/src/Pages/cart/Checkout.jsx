@@ -1,6 +1,7 @@
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
+import Footer from "../../Components/layout/Footer";
 import "./Checkout.css";
 
 function Checkout() {
@@ -18,6 +19,7 @@ function Checkout() {
   }, []);
 
   return (
+    <main>
     <div className="checkout-container">
       <div className="checkout-card">
         <h1>✅ Pago realizado con éxito</h1>
@@ -25,6 +27,8 @@ function Checkout() {
         <p>Serás redirigido al catálogo</p>
       </div>
     </div>
+    <Footer/>
+    </main>
   );
 }
 

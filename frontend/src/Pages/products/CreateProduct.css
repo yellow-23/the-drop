@@ -1,0 +1,117 @@
+.product-create {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.product-create h3 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.profile-divider {
+  width: 100%;
+  background: #7a00cc;
+  margin-bottom: 40px;
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 32px;
+}
+
+.form-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-field label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-button {
+  margin-top: 20px;
+  padding: 12px;
+  width: 260px;
+  border: none;
+  border-radius: 8px;
+  background: #7a00cc;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-button:hover {
+  opacity: 0.9;
+}
+
+.preview {
+  width: 100%;
+  margin-top: 0; 
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview .form-title {
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+}
+
+.form,
+.preview {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .form-button {
+    width: 100%;
+  }
+}
+
+
+@media (min-width: 992px) {
+  .form {
+    flex: 0 0 58%;
+  }
+
+  .preview {
+    flex: 0 0 42%;
+  }
+}
