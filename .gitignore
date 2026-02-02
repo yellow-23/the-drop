@@ -5,6 +5,7 @@ build/
 
 # Variables de entorno (¡Muy importante!)
 .env
+.env.example
 .DS_Store
 .vscode/
 coverage/
