@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     buildCommand: cd backend && npm install
-    startCommand: cd backend && npm run server
+    startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -20,14 +20,14 @@ services:
     runtime: static
     plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishDirectory: frontend/dist
+    staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         value: https://the-drop-backend.onrender.com/api
 
-  - type: pserv
-    name: the-drop-db
+databases:
+  - name: the-drop-db
     plan: free
-    ipAllowList: []
     databaseName: thedrop_db
     user: thedrop_user
+
