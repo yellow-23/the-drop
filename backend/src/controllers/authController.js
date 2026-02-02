@@ -10,9 +10,9 @@ const generateToken = (id) => {
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, nombre, apellido } = req.body;
+    const { email, password, nombre } = req.body;
 
-    if (!email || !password || !nombre || !apellido) {
+    if (!email || !password || !nombre) {
       return res.status(400).json({
         ok: false,
         message: "Datos incompletos",
@@ -34,10 +34,10 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      `INSERT INTO usuarios (email, password_hash, nombre, apellido, reputacion)
-       VALUES ($1, $2, $3, $4, 5.0)
-       RETURNING id, email, nombre, apellido, nickname, region, comuna, avatar`,
-      [email, hashedPassword, nombre, apellido]
+      `INSERT INTO usuarios (email, password_hash, nombre, reputacion, creado_en)
+       VALUES ($1, $2, $3, 5.0, NOW())
+       RETURNING id, email, nombre, region, comuna, avatar`,
+      [email, hashedPassword, nombre]
     );
 
     const user = result.rows[0];
@@ -49,6 +49,7 @@ exports.register = async (req, res) => {
       token,
     });
   } catch (error) {
+    console.error("Error en register:", error.message);
     res.status(500).json({
       ok: false,
       message: "Error al registrar usuario",
