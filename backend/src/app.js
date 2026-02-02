@@ -15,8 +15,20 @@ const tallasRoutes = require("./routes/size_routes");
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173', // Desarrollo local
+  'http://localhost:3000', // Desarrollo local backend
+  process.env.FRONTEND_URL || 'http://localhost:5173' // Producción
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
