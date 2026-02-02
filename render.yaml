@@ -2,7 +2,6 @@ services:
   - type: web
     name: the-drop-backend
     runtime: node
-    plan: starter
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
     envVars:
@@ -18,7 +17,6 @@ services:
   - type: web
     name: the-drop-frontend
     runtime: static
-    plan: starter
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
@@ -27,7 +25,6 @@ services:
 
 databases:
   - name: the-drop-db
-    plan: starter
     databaseName: thedrop_db
     user: thedrop_user
 
