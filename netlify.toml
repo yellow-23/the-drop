@@ -5,7 +5,7 @@ command = "cd frontend && npm install && npm run build"
 publish = "frontend/dist"
 
 [build.environment]
-VITE_API_URL = "https://the-drop-api.herokuapp.com/api"
+VITE_API_URL = "https://the-drop-i4pa.onrender.com/api"
 
 # Si usas Netlify Functions para el backend (opcional)
 # command = "cd frontend && npm run build && cd ../backend && npm install"
@@ -13,7 +13,7 @@ VITE_API_URL = "https://the-drop-api.herokuapp.com/api"
 
 [[redirects]]
 from = "/api/*"
-to = "https://the-drop-api.herokuapp.com/api/:splat"
+to = "https://the-drop-i4pa.onrender.com/api/:splat"
 status = 200
 
 # Para Single Page Application (React Router)
