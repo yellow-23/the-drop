@@ -63,9 +63,20 @@
   margin-bottom: 1rem;
 }
 
-.btn-write-review:hover {
+.btn-write-review:hover:not(:disabled) {
   background: #6d0fad;
   transform: translateY(-2px);
+}
+
+.btn-write-review:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-prompt {
+  color: #999;
+  font-style: italic;
+  margin-bottom: 1rem;
 }
 
 .review-form {
@@ -129,8 +140,33 @@
   width: 100%;
 }
 
-.review-form .btn-submit:hover {
+.review-form .btn-submit:hover:not(:disabled) {
   background: #6d0fad;
+}
+
+.review-form .btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.review-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-delete-review {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.btn-delete-review:hover {
+  color: #e74c3c;
 }
 
 .reviews-list {

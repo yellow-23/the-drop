@@ -1,24 +1,103 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../Context/AuthContext";
+import { useNotification } from "../../Context/NotificationContext";
+import reviewsService from "../../services/reviewsService";
 import "./ProductReviews.css";
 
-function ProductReviews({ productId, reviews = [] }) {
+function ProductReviews({ productId, publicacionId = null }) {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
   const [showForm, setShowForm] = useState(false);
+  const { user } = useAuth();
+  const { showSuccess, showError } = useNotification();
 
-  const handleSubmitReview = (e) => {
+  // Cargar reseñas
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        let data;
+        if (publicacionId) {
+          data = await reviewsService.getPublicacionReviews(publicacionId);
+        } else {
+          data = await reviewsService.getProductReviews(productId);
+        }
+        setReviews(data);
+      } catch (error) {
+        console.error("Error cargando reseñas:", error);
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (productId || publicacionId) {
+      fetchReviews();
+    }
+  }, [productId, publicacionId]);
+
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!newReview.comment.trim()) {
-      alert("Escribe un comentario");
+
+    if (!user) {
+      showError("Debes iniciar sesión para dejar una reseña");
       return;
     }
-    console.log("Review enviada:", newReview);
-    setNewReview({ rating: 5, comment: "" });
-    setShowForm(false);
+
+    if (!newReview.comment.trim()) {
+      showError("Escribe un comentario");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      let createdReview;
+
+      if (publicacionId) {
+        createdReview = await reviewsService.createPublicacionReview(publicacionId, {
+          rating: newReview.rating,
+          comment: newReview.comment,
+        });
+      } else {
+        createdReview = await reviewsService.createProductReview(productId, {
+          rating: newReview.rating,
+          comment: newReview.comment,
+        });
+      }
+
+      setReviews([createdReview, ...reviews]);
+      setNewReview({ rating: 5, comment: "" });
+      setShowForm(false);
+      showSuccess("Reseña enviada exitosamente");
+    } catch (error) {
+      console.error("Error al enviar reseña:", error);
+      showError(error.message || "Error al enviar la reseña");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const averageRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-    : 0;
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar esta reseña?")) {
+      return;
+    }
+
+    try {
+      await reviewsService.deleteReview(reviewId);
+      setReviews(reviews.filter((r) => r.id !== reviewId));
+      showSuccess("Reseña eliminada");
+    } catch (error) {
+      console.error("Error al eliminar reseña:", error);
+      showError("Error al eliminar la reseña");
+    }
+  };
+
+  const averageRating =
+    reviews.length > 0
+      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+      : 0;
 
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -27,6 +106,10 @@ function ProductReviews({ productId, reviews = [] }) {
       </span>
     ));
   };
+
+  if (loading) {
+    return <div className="reviews-section"><p>Cargando reseñas...</p></div>;
+  }
 
   return (
     <div className="reviews-section">
@@ -42,14 +125,19 @@ function ProductReviews({ productId, reviews = [] }) {
         )}
       </div>
 
-      <button
-        className="btn-write-review"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? "Cerrar" : "Escribir Reseña"}
-      </button>
+      {user ? (
+        <button
+          className="btn-write-review"
+          onClick={() => setShowForm(!showForm)}
+          disabled={submitting}
+        >
+          {showForm ? "Cerrar" : "Escribir Reseña"}
+        </button>
+      ) : (
+        <p className="login-prompt">Inicia sesión para dejar una reseña</p>
+      )}
 
-      {showForm && (
+      {showForm && user && (
         <form onSubmit={handleSubmitReview} className="review-form">
           <div className="form-group">
             <label>Calificación</label>
@@ -77,8 +165,8 @@ function ProductReviews({ productId, reviews = [] }) {
             />
           </div>
 
-          <button type="submit" className="btn-submit">
-            Enviar Reseña
+          <button type="submit" className="btn-submit" disabled={submitting}>
+            {submitting ? "Enviando..." : "Enviar Reseña"}
           </button>
         </form>
       )}
@@ -87,16 +175,27 @@ function ProductReviews({ productId, reviews = [] }) {
         {reviews.length === 0 ? (
           <p className="no-reviews">Sin reseñas aún. ¡Sé el primero!</p>
         ) : (
-          reviews.map((review, idx) => (
-            <div key={idx} className="review-item">
+          reviews.map((review) => (
+            <div key={review.id} className="review-item">
               <div className="review-header">
                 <div className="reviewer-info">
                   <strong className="reviewer-name">{review.usuario || "Usuario"}</strong>
                   <div className="review-rating">{renderStars(review.rating)}</div>
                 </div>
-                <span className="review-date">
-                  {review.fecha ? new Date(review.fecha).toLocaleDateString() : "Hace poco"}
-                </span>
+                <div className="review-actions">
+                  <span className="review-date">
+                    {review.fecha ? new Date(review.fecha).toLocaleDateString() : "Hace poco"}
+                  </span>
+                  {user && user.id === review.usuario_id && (
+                    <button
+                      className="btn-delete-review"
+                      onClick={() => handleDeleteReview(review.id)}
+                      title="Eliminar reseña"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
               </div>
               <p className="review-comment">{review.comment}</p>
             </div>

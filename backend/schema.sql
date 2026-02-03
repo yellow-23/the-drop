@@ -1,4 +1,5 @@
 -- Eliminar tablas si existen (en orden inverso de dependencias)
+DROP TABLE IF EXISTS resenas CASCADE;
 DROP TABLE IF EXISTS items_orden CASCADE;
 DROP TABLE IF EXISTS ordenes CASCADE;
 DROP TABLE IF EXISTS items_carrito CASCADE;
@@ -131,6 +132,20 @@ CREATE TABLE items_orden (
     precio_snapshot_clp INTEGER NOT NULL
 );
 
+CREATE TABLE resenas (
+    id BIGSERIAL PRIMARY KEY,
+    usuario_id BIGINT NOT NULL REFERENCES usuarios(id),
+    producto_id BIGINT REFERENCES productos(id),
+    publicacion_id BIGINT REFERENCES publicaciones_usuario(id),
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT NOT NULL,
+    creado_en TIMESTAMPTZ NOT NULL,
+    CONSTRAINT check_item_type CHECK (
+        (producto_id IS NOT NULL AND publicacion_id IS NULL) OR
+        (producto_id IS NULL AND publicacion_id IS NOT NULL)
+    )
+);
+
 CREATE INDEX idx_usuarios_email ON usuarios(email);
 CREATE INDEX idx_productos_usuario_id ON productos(usuario_id);
 CREATE INDEX idx_productos_marca_id ON productos(marca_id);
@@ -142,6 +157,9 @@ CREATE INDEX idx_items_carrito_carrito_id ON items_carrito(carrito_id);
 CREATE INDEX idx_favoritos_usuario_id ON favoritos(usuario_id);
 CREATE INDEX idx_publicaciones_usuario_id ON publicaciones_usuario(usuario_id);
 CREATE INDEX idx_publicaciones_titulo ON publicaciones_usuario(titulo);
+CREATE INDEX idx_resenas_producto_id ON resenas(producto_id);
+CREATE INDEX idx_resenas_publicacion_id ON resenas(publicacion_id);
+CREATE INDEX idx_resenas_usuario_id ON resenas(usuario_id);
 
 INSERT INTO marcas (nombre) VALUES 
 ('Nike'),

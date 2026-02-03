@@ -12,6 +12,7 @@ const favoritosRoutes = require("./routes/favoritos_routes");
 const publicacionesRoutes = require("./routes/publicaciones_routes");
 const marcasRoutes = require("./routes/brand_routes");    
 const tallasRoutes = require("./routes/size_routes");
+const reviewsRoutes = require("./routes/reviews_routes");
 
 const app = express();
 
@@ -54,5 +55,6 @@ app.use("/api/favorites", favoritosRoutes);
 app.use("/api/publications", publicacionesRoutes);
 app.use("/api/brands", marcasRoutes);
 app.use("/api/sizes", tallasRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 module.exports = app;

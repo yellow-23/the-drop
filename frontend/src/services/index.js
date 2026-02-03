@@ -4,6 +4,6 @@ export { default as productService } from './productService';
 export { default as cartService } from './cartService';
 export { default as favoritesService } from './favoritesService';
 export { default as orderService } from './orderService';
-export { default as variantesService } from './variantesService';
 export { default as imagenesService } from './imagenesService';
 export { default as publicacionesService } from './publicacionesService';
+export { default as reviewsService } from './reviewsService';

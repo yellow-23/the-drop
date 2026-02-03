@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import publicacionesService from "../../services/publicacionesService";
+import reviewsService from "../../services/reviewsService";
 import { CartContext } from "../../Context/CartContext";
 import { useFavorites } from "../../Context/FavoritesContext";
 import { useNotification } from "../../Context/NotificationContext";
@@ -16,12 +17,17 @@ function ProductDetail() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [rating, setRating] = useState({ promedio: 0, total_resenas: 0 });
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const data = await publicacionesService.getPublicacionById(id);
         setProduct(data.publicacion);
+        
+        // Obtener rating de reseñas
+        const ratingData = await reviewsService.getPublicacionRating(id);
+        setRating(ratingData);
       } catch (error) {
         console.error("Error al obtener publicación:", error);
         showError("Error al cargar el producto");
@@ -99,8 +105,14 @@ function ProductDetail() {
           </div>
 
           <div className="product-rating">
-            <span className="stars">★★★★★</span>
-            <span className="review-count">(128 reseñas)</span>
+            <span className="stars">
+              {Array.from({ length: 5 }, (_, i) => (
+                <span key={i} className={i < Math.round(rating.promedio) ? "filled" : ""}>
+                  ★
+                </span>
+              ))}
+            </span>
+            <span className="review-count">({rating.total_resenas} {rating.total_resenas === 1 ? 'reseña' : 'reseñas'})</span>
           </div>
 
           <div className="product-price-detail">
@@ -160,7 +172,7 @@ function ProductDetail() {
         </div>
       </div>
 
-      <ProductReviews productId={product.id} reviews={[]} />
+      <ProductReviews publicacionId={product.id} />
     </div>
   );
 }
