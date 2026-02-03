@@ -14,7 +14,9 @@ function ProductCard({
   talla,
   imagen,
   showDelete = false,
+  showEdit = false,
   onDelete,
+  onEdit,
 }) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -26,7 +28,7 @@ function ProductCard({
     <div className="product-card">
 
       <div className="product-card-actions">
-      {!showDelete && (
+      {!showDelete && !showEdit && (
         <button
         className={`favorite-btn ${favorite ? "active" : ""}`}
         onClick={() =>
@@ -39,10 +41,30 @@ function ProductCard({
       
         {showDelete && (
           <button
-            className="favorite-btn"
+            className="favorite-btn delete-btn"
             onClick={() => onDelete(id)}
           >
             X
+          </button>
+        )}
+
+        {showEdit && (
+          <button
+            className="favorite-btn edit-btn"
+            onClick={() => onEdit(id)}
+            title="Editar"
+          >
+            ✎
+          </button>
+        )}
+
+        {showEdit && (
+          <button
+            className="favorite-btn edit-btn"
+            onClick={() => onEdit(id)}
+            title="Editar producto"
+          >
+            ✎
           </button>
         )}
 
@@ -89,11 +111,7 @@ function ProductCard({
         >
           DETALLE
         </button>
-
-        
       </div>
     </div>
   );
-}
-
-export default ProductCard;
+}export default ProductCard;

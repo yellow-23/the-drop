@@ -25,6 +25,7 @@ function Navbar() {
           {user && (
             <>
               <NavLink to="/profile">Perfil</NavLink>
+              <NavLink to="/orders">Órdenes</NavLink>
               <NavLink to="/create-product">Publicar</NavLink>
               <button
                 className="nav-link-btn logout-btn"
@@ -62,6 +63,7 @@ function Navbar() {
           {user && (
             <>
               <NavLink to="/profile">Perfil</NavLink>
+              <NavLink to="/orders">Órdenes</NavLink>
               <NavLink to="/create-product">Publicar</NavLink>
               <button
                 className="logout-btn"

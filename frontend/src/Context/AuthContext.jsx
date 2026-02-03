@@ -32,16 +32,28 @@ export function AuthProvider({ children }) {
   const fetchProfile = async () => {
     try {
       const data = await authService.getProfile();
-      setUser(data.user || data);
-    } catch {
-      logout();
+      const userData = data.user || data;
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      const cachedUser = authService.getCurrentUser();
+      if (cachedUser) {
+        setUser(cachedUser);
+      } else {
+        logout();
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (authService.isAuthenticated()) {
+    const token = localStorage.getItem('token');
+    const cachedUser = authService.getCurrentUser();
+    
+    if (token && cachedUser) {
+      setUser(cachedUser);
       fetchProfile();
     } else {
       setLoading(false);

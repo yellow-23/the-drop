@@ -117,6 +117,7 @@ CREATE TABLE ordenes (
     estado VARCHAR(20) NOT NULL,
     region_envio VARCHAR(80) NOT NULL,
     comuna_envio VARCHAR(80) NOT NULL,
+    direccion VARCHAR(255),
     creado_en TIMESTAMPTZ NOT NULL
 );
 

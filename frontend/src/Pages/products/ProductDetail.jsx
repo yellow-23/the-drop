@@ -3,6 +3,8 @@ import { useEffect, useState, useContext } from "react";
 import publicacionesService from "../../services/publicacionesService";
 import { CartContext } from "../../Context/CartContext";
 import { useFavorites } from "../../Context/FavoritesContext";
+import { useNotification } from "../../Context/NotificationContext";
+import ProductReviews from "../../Components/product/ProductReviews";
 import "./ProductDetail.css";
 
 function ProductDetail() {
@@ -10,6 +12,7 @@ function ProductDetail() {
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { showSuccess, showError } = useNotification();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +24,7 @@ function ProductDetail() {
         setProduct(data.publicacion);
       } catch (error) {
         console.error("Error al obtener publicación:", error);
+        showError("Error al cargar el producto");
       } finally {
         setLoading(false);
       }
@@ -48,7 +52,7 @@ function ProductDetail() {
 
   const handleAddToCart = () => {
     addToCart("publicacion", null, product.id, 1);
-    alert("Producto agregado al carrito");
+    showSuccess("Producto agregado al carrito");
   };
 
   const handleToggleFavorite = () => {
@@ -155,6 +159,8 @@ function ProductDetail() {
           </div>
         </div>
       </div>
+
+      <ProductReviews productId={product.id} reviews={[]} />
     </div>
   );
 }

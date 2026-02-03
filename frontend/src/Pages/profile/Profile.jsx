@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
+import { useNotification } from "../../Context/NotificationContext";
 import publicacionesService from "../../services/publicacionesService";
 import ProductCard from "../../Components/product/ProductCard";
 import { useFavorites } from "../../Context/FavoritesContext";
@@ -12,18 +13,17 @@ function Profile() {
   const navigate = useNavigate();
   const { favorites } = useFavorites();
   const { user, updateProfile, logout } = useAuth();
+  const { showSuccess, showError } = useNotification();
   const [myProducts, setMyProducts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
 
 
-  const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
       avatar: user?.avatar || "",
-      nickname: user?.nickname || "",
       nombre: user?.nombre || "",
-      apellido: user?.apellido || "",
       region: user?.region || "",
       comuna: user?.comuna || "",
-  });
+    });
 
   const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,11 +33,11 @@ function Profile() {
       e.preventDefault();
       try {
       await updateProfile(formData);
-      alert("Perfil actualizado con exito");
+      showSuccess("Perfil actualizado con éxito");
       }
       catch (error) {
           console.error(error);
-          alert(error.message || "Error al actualizar el perfil");
+          showError(error.message || "Error al actualizar el perfil");
       }
   };
 
@@ -51,18 +51,16 @@ function Profile() {
   try {
     await publicacionesService.deletePublicacion(id);
     setMyProducts(prev => prev.filter(p => p.id !== id));
-    alert("Publicación eliminada");
+    showSuccess("Publicación eliminada");
   } catch (error) {
     console.error(error);
-    alert("Error al eliminar la publicación");
+    showError("Error al eliminar la publicación");
   }
 };
 
   const displayName = 
-  user?.nickname 
-  ? user.nickname
-  : user?.nombre || user?.apellido
-  ? `${user.nombre || ""} ${user.apellido || ""}`
+  user?.nombre
+  ? `${user.nombre}`
   : user?.email
 
  useEffect(() => {
@@ -186,7 +184,8 @@ function Profile() {
             marca={p.marca}
             talla={p.talla}
             imagen={p.imagenes?.[0]}
-            showDelete
+            showEdit
+            onEdit={(id) => navigate(`/edit-product/${id}`)}
             onDelete={handleDeletePost} />
           </div>
         ))}
@@ -217,32 +216,12 @@ function Profile() {
           </div>
 
           <div className="form-field">
-            <label>Nickname</label>
-            <input
-              name="nickname"
-              value={formData.nickname}
-              onChange={handleChange}
-              placeholder="Nickname"
-            />
-          </div>
-
-          <div className="form-field">
             <label>Nombre</label>
             <input
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
               placeholder="Nombre"
-            />
-          </div>
-
-          <div className="form-field">
-            <label>Apellido</label>
-            <input
-              name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
-              placeholder="Apellido"
             />
           </div>
 

@@ -5,6 +5,7 @@ import publicacionesService from "../../services/publicacionesService";
 import brandService from "../../services/brandService";
 import sizeService from "../../services/sizeService";
 import { useAuth } from "../../Context/AuthContext";
+import { useNotification } from "../../Context/NotificationContext";
 import "./CreateProduct.css";
 import Footer from "../../Components/layout/Footer";
 
@@ -22,6 +23,7 @@ const emptyProduct = {
 function CreateProduct() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showSuccess, showError } = useNotification();
 
   const [formData, setFormData] = useState(emptyProduct);
   const [brands, setBrands] = useState([]);
@@ -54,7 +56,7 @@ function CreateProduct() {
     e.preventDefault();
 
     if (!user) {
-      alert("Debes iniciar sesión para publicar");
+      showError("Debes iniciar sesión para publicar");
       return;
     }
 
@@ -72,11 +74,11 @@ function CreateProduct() {
 
       const response = await publicacionesService.createPublicacion(payload);
       
-      alert("Producto publicado con exito");
+      showSuccess("Producto publicado con éxito");
       navigate(`/publications/${response.publicacion.id}`);
     } catch (error) {
       console.error(error);
-      alert(error.message || "Error al publicar el producto");
+      showError(error.message || "Error al publicar el producto");
     }
   };
 

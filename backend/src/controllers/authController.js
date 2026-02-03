@@ -41,6 +41,13 @@ exports.register = async (req, res) => {
     );
 
     const user = result.rows[0];
+
+    // Crear carrito automáticamente para el nuevo usuario
+    await pool.query(
+      "INSERT INTO carritos (usuario_id, creado_en) VALUES ($1, NOW())",
+      [user.id]
+    );
+
     const token = generateToken(user.id);
 
     res.status(201).json({
@@ -91,6 +98,19 @@ exports.login = async (req, res) => {
       });
     }
 
+    // Crear carrito si no existe
+    const carroCheck = await pool.query(
+      "SELECT id FROM carritos WHERE usuario_id = $1",
+      [user.id]
+    );
+
+    if (carroCheck.rows.length === 0) {
+      await pool.query(
+        "INSERT INTO carritos (usuario_id, creado_en) VALUES ($1, NOW())",
+        [user.id]
+      );
+    }
+
     const token = generateToken(user.id);
 
     res.json({
@@ -100,8 +120,6 @@ exports.login = async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
-        apellido: user.apellido,
-        nickname: user.nickname,
         region: user.region,
         comuna: user.comuna,
         avatar: user.avatar,
@@ -123,7 +141,7 @@ exports.getProfile = async (req, res) => {
     const userId = req.userId;
 
     const userResult = await pool.query(
-      "SELECT id, email, nombre, apellido, nickname, region, comuna, reputacion, avatar, creado_en FROM usuarios WHERE id = $1",
+      "SELECT id, email, nombre, region, comuna, reputacion, avatar, creado_en FROM usuarios WHERE id = $1",
       [userId]
     );
 
@@ -151,19 +169,17 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    const { nombre, apellido, nickname, region, comuna, avatar } = req.body;
+    const { nombre, region, comuna, avatar } = req.body;
 
     const result = await pool.query(
       `UPDATE usuarios
-       SET nombre   = COALESCE($2, nombre),
-           apellido = COALESCE($3, apellido),
-           nickname = COALESCE($4, nickname),
-           region   = COALESCE($5, region),
-           comuna   = COALESCE($6, comuna),
-           avatar   = COALESCE($7, avatar)
+       SET nombre = COALESCE($2, nombre),
+           region = COALESCE($3, region),
+           comuna = COALESCE($4, comuna),
+           avatar = COALESCE($5, avatar)
        WHERE id = $1
-       RETURNING id, email, nombre, apellido, nickname, region, comuna, avatar`,
-      [userId, nombre, apellido, nickname, region, comuna, avatar]
+       RETURNING id, email, nombre, region, comuna, avatar`,
+      [userId, nombre, region, comuna, avatar]
     );
 
     if (result.rows.length === 0) {

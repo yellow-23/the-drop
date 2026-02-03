@@ -3,12 +3,12 @@ const pool = require("../db");
 exports.createOrder = async (req, res) => {
   try {
     const userId = req.userId;
-    const { region_envio, comuna_envio } = req.body;
+    const { region_envio, comuna_envio, direccion } = req.body;
 
-    if (!region_envio || !comuna_envio) {
+    if (!region_envio || !comuna_envio || !direccion) {
       return res.status(400).json({
         ok: false,
-        message: "region_envio y comuna_envio son requeridos",
+        message: "region_envio, comuna_envio y direccion son requeridos",
       });
     }
 
@@ -57,10 +57,10 @@ exports.createOrder = async (req, res) => {
     const ordenId = Date.now();
 
     const ordenResult = await pool.query(
-      `INSERT INTO ordenes (id, usuario_id, total_clp, estado, region_envio, comuna_envio, creado_en)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO ordenes (id, usuario_id, total_clp, estado, region_envio, comuna_envio, direccion, creado_en)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [ordenId, userId, totalClp, "pendiente", region_envio, comuna_envio, new Date()]
+      [ordenId, userId, totalClp, "pendiente", region_envio, comuna_envio, direccion, new Date()]
     );
 
     for (const item of itemsResult.rows) {
@@ -99,6 +99,7 @@ exports.getUserOrders = async (req, res) => {
         o.estado,
         o.region_envio,
         o.comuna_envio,
+        o.direccion,
         o.creado_en,
         (SELECT COUNT(*) FROM items_orden WHERE orden_id = o.id) as item_count
        FROM ordenes o

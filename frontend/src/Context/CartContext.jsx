@@ -54,8 +54,11 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
-    fetchCart();
+    if (token) {
+      fetchCart();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   return (
