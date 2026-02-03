@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-color: #810fce;
+  --secondary-color: #c8ff00;
+  --dark-bg: #1a1a1a;
+  --light-bg: #ffffff;
+  --text-dark: #333;
+  --text-light: #666;
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
 html,
 body,
 #root {
@@ -8,14 +23,34 @@ body,
 
 body {
   background-color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
 }
 
 main.app-content {
-  padding-top: 56px;
+  padding-top: 70px;
+  min-height: 100vh;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+h2 {
+  font-size: 2.2em;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.8em;
+  line-height: 1.3;
 }
 
 button {
@@ -23,18 +58,50 @@ button {
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--dark-bg);
+  color: #fff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
 }
+
 button:hover {
-  border-color: #c8ff00;
+  border-color: var(--secondary-color);
+  transform: translateY(-2px);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Scroll Bar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ab41f1, #e6ff4d);
 }
 
 @media (prefers-color-scheme: light) {
@@ -42,15 +109,37 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+  
   a:hover {
-    color: #000;
+    color: var(--secondary-color);
   }
+  
   button {
     background-color: #f9f9f9;
+    color: #000;
   }
-  html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+  
+  button:hover {
+    background: linear-gradient(135deg, var(--primary-color), #ab41f1);
+    color: #fff;
+  }
 }
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Utility Classes */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }

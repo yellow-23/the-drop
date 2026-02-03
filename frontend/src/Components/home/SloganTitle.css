@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+.slogan-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.8) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.slogan-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(200, 255, 0, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.slogan-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  right: -30%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(129, 15, 206, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.slogan-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #810fce 0%, #c8ff00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slogan-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+.slogan-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #810fce, #c8ff00);
+  margin: 0 auto;
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+}

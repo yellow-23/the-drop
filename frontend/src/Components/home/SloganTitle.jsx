@@ -1,12 +1,15 @@
 import Container from "react-bootstrap/Container";
+import "./SloganTitle.css";
+
 export default function SloganTitle() {
   return (
-    <section className="py-4 my-4">
+    <section className="slogan-section">
       <Container className="text-center">
-        <h2 className="mb-2">Dale una segunda vida a tus zapatillas</h2>
-        <p className="text-muted mb-0">
+        <h2 className="slogan-title">Dale una segunda vida a tus zapatillas</h2>
+        <p className="slogan-subtitle">
           Compra, vende y reutiliza de forma consciente
         </p>
+        <div className="slogan-divider"></div>
       </Container>
     </section>
   );

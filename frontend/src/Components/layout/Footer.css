@@ -1,3 +1,71 @@
-.bg-footer-thedrop{
-	background-color: #c8ff00;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.footer-simple {
+  background: linear-gradient(135deg, #810fce 0%, #6b0da8 100%);
+  color: #fff;
+  margin-top: 60px;
+  padding-top: 2rem;
+}
+
+.footer-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #c8ff00;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-list li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-list a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-list a:hover {
+  color: #c8ff00;
+}
+
+.footer-divider {
+  height: 1px;
+  background: rgba(200, 255, 0, 0.2);
+  margin: 2rem 0;
+}
+
+.footer-bottom {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .footer-simple {
+    padding-top: 1.5rem;
+  }
+
+  .footer-heading {
+    font-size: 1rem;
+  }
+
+  .footer-list a {
+    font-size: 0.85rem;
+  }
 }

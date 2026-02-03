@@ -1,44 +1,41 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
 import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="bg-footer-thedrop border-top py-4">
+    <footer className="footer-simple">
       <Container>
-        <Row className="gy-4 text-center text-md-start">
-          <Col xs={12} md={6}>
-            <h6 className="text-uppercase mb-3">Menú</h6>
-            <Nav className="flex-column gap-2 align-items-center align-items-md-start">
-              <Nav.Link href="/" className="p-0 text-muted">Home</Nav.Link>
-              <Nav.Link href="/catalog" className="p-0 text-muted">Catálogo</Nav.Link>
-              <Nav.Link href="/login" className="p-0 text-muted">Login</Nav.Link>
-              <Nav.Link href="/register" className="p-0 text-muted">Registro</Nav.Link>
-            </Nav>
+        <Row className="py-5 gy-4">
+          <Col xs={12} md={4}>
+            <h6 className="footer-heading">THE DROP</h6>
+            <p className="footer-text">Marketplace de zapatillas. Compra, vende y reutiliza.</p>
           </Col>
-          <Col xs={12} md={6}>
-            <h6 className="text-uppercase mb-3">Categorías</h6>
-            <Nav className="flex-column gap-2 align-items-center align-items-md-start">
-              <Nav.Link href="/catalog?type=used" className="p-0 text-muted">
-                Zapatillas usadas
-              </Nav.Link>
-              <Nav.Link href="/catalog?type=new" className="p-0 text-muted">
-                Zapatillas nuevas
-              </Nav.Link>
-              <Nav.Link href="/catalog?tag=hot" className="p-0 text-muted">
-                Hot trend 🔥
-              </Nav.Link>
-              <Nav.Link href="/catalog?sort=views" className="p-0 text-muted">
-                Más vistas 👀
-              </Nav.Link>
-            </Nav>
+          <Col xs={12} md={4}>
+            <h6 className="footer-heading">Navegación</h6>
+            <ul className="footer-list">
+              <li><a href="/">Home</a></li>
+              <li><a href="/catalog">Catálogo</a></li>
+              <li><a href="/login">Login</a></li>
+              <li><a href="/register">Registro</a></li>
+            </ul>
+          </Col>
+          <Col xs={12} md={4}>
+            <h6 className="footer-heading">Categorías</h6>
+            <ul className="footer-list">
+              <li><a href="/catalog?type=used">Zapatillas usadas</a></li>
+              <li><a href="/catalog?type=new">Zapatillas nuevas</a></li>
+              <li><a href="/catalog?tag=hot">Hot trend 🔥</a></li>
+              <li><a href="/catalog?sort=views">Más vistas</a></li>
+            </ul>
           </Col>
         </Row>
-        <hr className="my-4" />
-        <div className="text-center text-muted">
-          <small>© {new Date().getFullYear()} The Drop</small>
+        
+        <div className="footer-divider"></div>
+        
+        <div className="footer-bottom py-4 text-center">
+          <p className="mb-0">© {new Date().getFullYear()} The Drop. Todos los derechos reservados.</p>
         </div>
       </Container>
     </footer>

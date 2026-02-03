@@ -12,30 +12,30 @@ export default function HowItWorks() {
   return (
     <section className="howitworks">
       <Container>
-        <h2 className="howitworks__title text-center mb-4">¿Cómo Funciona?</h2>
+        <h2 className="howitworks__title">¿Cómo Funciona?</h2>
         <Row className="g-4 justify-content-center">
-          <Col xs={10} sm={6} md={3}>
+          <Col xs={12} sm={6} md={5} lg={3}>
             <div className="howitworks__card">
               <img className="howitworks__icon" src={dropSneaker} alt="Publica" />
               <p className="howitworks__text">Publica tus<br />zapatillas</p>
             </div>
           </Col>
 
-          <Col xs={10} sm={6} md={3}>
+          <Col xs={12} sm={6} md={5} lg={3}>
             <div className="howitworks__card">
               <img className="howitworks__icon" src={secure} alt="Seguro" />
               <p className="howitworks__text">Compra de<br />forma segura</p>
             </div>
           </Col>
 
-          <Col xs={10} sm={6} md={3}>
+          <Col xs={12} sm={6} md={5} lg={3}>
             <div className="howitworks__card">
               <img className="howitworks__icon" src={recycle} alt="Reutiliza" />
               <p className="howitworks__text">Reutiliza y cuida<br />el planeta</p>
             </div>
           </Col>
 
-          <Col xs={10} sm={6} md={3}>
+          <Col xs={12} sm={6} md={5} lg={3}>
             <div className="howitworks__card">
               <img className="howitworks__icon" src={life} alt="Segunda vida" />
               <p className="howitworks__text">Dale una<br />segunda vida</p>
