@@ -30,14 +30,14 @@ export default function HeroCTA() {
               to="/catalog"
               className="button-cta-hero button-cta-hero_primary"
             >
-              ✨ Explorar Catálogo
+            Explorar Catálogo
             </Button>
             <Button
               as={NavLink}
               to="/create-product"
               className="button-cta-hero button-cta-hero_variant"
             >
-              📦 Comienza a Vender
+            Comienza a Vender
             </Button>
           </Col>
         </Row>

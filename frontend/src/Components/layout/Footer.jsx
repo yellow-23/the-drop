@@ -26,7 +26,7 @@ export default function Footer() {
             <ul className="footer-list">
               <li><a href="/catalog?type=used">Zapatillas usadas</a></li>
               <li><a href="/catalog?type=new">Zapatillas nuevas</a></li>
-              <li><a href="/catalog?tag=hot">Hot trend 🔥</a></li>
+              <li><a href="/catalog?tag=hot">Hot trend</a></li>
               <li><a href="/catalog?sort=views">Más vistas</a></li>
             </ul>
           </Col>
