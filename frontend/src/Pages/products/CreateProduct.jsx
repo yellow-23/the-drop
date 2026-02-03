@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Components/product/ProductCard";
+import SuccessModal from "../../Components/utils/SuccessModal";
 import publicacionesService from "../../services/publicacionesService";
 import brandService from "../../services/brandService";
 import sizeService from "../../services/sizeService";
@@ -23,11 +24,12 @@ const emptyProduct = {
 function CreateProduct() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { showSuccess, showError } = useNotification();
+  const { showError } = useNotification();
 
   const [formData, setFormData] = useState(emptyProduct);
   const [brands, setBrands] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
   const loadData = async () => {
@@ -73,9 +75,8 @@ function CreateProduct() {
 };
 
       const response = await publicacionesService.createPublicacion(payload);
-      
-      showSuccess("Producto publicado con éxito");
-      navigate(`/publications/${response.publicacion.id}`);
+      etShowModal(trueación creada exitosamente");
+      navigate("/catalog");
     } catch (error) {
       console.error(error);
       showError(error.message || "Error al publicar el producto");
@@ -209,6 +210,14 @@ function CreateProduct() {
         </div>
       </div>
     </div>
+
+    <SuccessModal
+      isOpen={showModal}
+      title="¡Publicación Creada!"
+      message="Tu zapatilla ha sido publicada exitosamente en el catálogo."
+      onClose={() => navigate("/catalog")}
+    />
+
     <Footer />
     </main>
   );

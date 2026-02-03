@@ -1,6 +1,6 @@
 require("dotenv").config();
 const app = require("./app");
-const { runMigration } = require("./migrations/001_create_resenas_table");
+const { runMigration } = require("../migrations/001_create_resenas_table");
 
 const PORT = process.env.PORT || 3000;
 
