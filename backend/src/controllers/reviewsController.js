@@ -97,10 +97,10 @@ exports.createPublicacionReview = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO resenas (usuario_id, publicacion_id, rating, comment, creado_en)
-       VALUES ($1, $2, $3, $4, NOW())
+      `INSERT INTO resenas (usuario_id, vendedor_id, publicacion_id, rating, comment, creado_en)
+       VALUES ($1, $2, $3, $4, $5, NOW())
        RETURNING id, rating, comment, creado_en as fecha`,
-      [usuarioId, publicacionId, rating, comment]
+      [usuarioId, vendedorId, publicacionId, rating, comment]
     );
 
     const userResult = await pool.query(

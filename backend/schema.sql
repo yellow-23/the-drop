@@ -135,12 +135,17 @@ CREATE TABLE items_orden (
 CREATE TABLE resenas (
     id BIGSERIAL PRIMARY KEY,
     usuario_id BIGINT NOT NULL REFERENCES usuarios(id),
+    vendedor_id BIGINT NOT NULL REFERENCES usuarios(id),
     producto_id BIGINT REFERENCES productos(id),
     publicacion_id BIGINT REFERENCES publicaciones_usuario(id),
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment TEXT NOT NULL,
     creado_en TIMESTAMPTZ NOT NULL,
     CONSTRAINT check_item_type CHECK (
+        (producto_id IS NOT NULL AND publicacion_id IS NULL) OR
+        (producto_id IS NULL AND publicacion_id IS NOT NULL)
+    ),
+    CONSTRAINT check_vendedor_required CHECK (
         (producto_id IS NOT NULL AND publicacion_id IS NULL) OR
         (producto_id IS NULL AND publicacion_id IS NOT NULL)
     )
