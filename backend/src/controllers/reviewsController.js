@@ -16,7 +16,7 @@ exports.getVendedorReviews = async (req, res) => {
       FROM resenas r
       LEFT JOIN usuarios u ON r.usuario_id = u.id
       LEFT JOIN publicaciones_usuario p ON r.publicacion_id = p.id
-      WHERE r.vendedor_id = $1
+      WHERE p.usuario_id = $1
       ORDER BY r.creado_en DESC`,
       [vendedorId]
     );
@@ -31,17 +31,6 @@ exports.getPublicacionReviews = async (req, res) => {
   try {
     const { publicacionId } = req.params;
     
-    const pubResult = await pool.query(
-      `SELECT usuario_id FROM publicaciones_usuario WHERE id = $1`,
-      [publicacionId]
-    );
-    
-    if (pubResult.rows.length === 0) {
-      return res.status(404).json({ message: "Publicación no encontrada" });
-    }
-    
-    const vendedorId = pubResult.rows[0].usuario_id;
-    
     const result = await pool.query(
       `SELECT 
         r.id,
@@ -55,9 +44,9 @@ exports.getPublicacionReviews = async (req, res) => {
       FROM resenas r
       LEFT JOIN usuarios u ON r.usuario_id = u.id
       LEFT JOIN publicaciones_usuario p ON r.publicacion_id = p.id
-      WHERE r.vendedor_id = $1
+      WHERE r.publicacion_id = $1
       ORDER BY r.creado_en DESC`,
-      [vendedorId]
+      [publicacionId]
     );
     res.json(result.rows);
   } catch (error) {
@@ -70,7 +59,7 @@ exports.createPublicacionReview = async (req, res) => {
   try {
     const { publicacionId } = req.params;
     const { rating, comment } = req.body;
-    const usuarioId = req.user.id;
+    const usuarioId = req.userId;
 
     if (!rating || !comment || rating < 1 || rating > 5) {
       return res.status(400).json({ message: "Datos inválidos" });
@@ -102,10 +91,10 @@ exports.createPublicacionReview = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO resenas (usuario_id, vendedor_id, publicacion_id, rating, comment, creado_en)
-       VALUES ($1, $2, $3, $4, $5, NOW())
+      `INSERT INTO resenas (usuario_id, publicacion_id, rating, comment, creado_en)
+       VALUES ($1, $2, $3, $4, NOW())
        RETURNING id, rating, comment, creado_en as fecha`,
-      [usuarioId, vendedorId, publicacionId, rating, comment]
+      [usuarioId, publicacionId, rating, comment]
     );
 
     const userResult = await pool.query(
