@@ -184,6 +184,7 @@ function Profile() {
 
   {/* CONTENIDO */}
     <main className="col-12 col-md-9 profile-content">
+      <div className="profile-content-body">
 
         {/* FAVORITOS */}
           {section === "favorites" && (
@@ -193,7 +194,7 @@ function Profile() {
     </div>
 
     {favorites.length === 0 ? (
-      <p>No tienes productos en favoritos aún</p>
+      <p className="p-content">No tienes productos en favoritos aún</p>
     ) : (
       <div className="contenido">
         {favorites.map((p) => (
@@ -214,9 +215,9 @@ function Profile() {
     <div className="profile-divider"></div>
 
     {loadingPosts ? (
-      <p>Cargando publicaciones...</p>
+      <p className="p-content">Cargando publicaciones...</p>
     ) : myProducts.length === 0 ? (
-      <p>No has publicado productos aún</p>
+      <p className="p-content">No has publicado productos aún</p>
     ) : (
       <div className="contenido">
         {myProducts.map((p) => (
@@ -324,6 +325,8 @@ function Profile() {
     </div>
   </>
 )}
+
+      </div>
     <footer className="desktop-footer">
       <div className="text-center text-muted">
           <small>© {new Date().getFullYear()} The Drop</small>
