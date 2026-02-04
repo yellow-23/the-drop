@@ -10,6 +10,7 @@ function ProductReviews({ vendedorId, publicacionId = null, vendedorNombre = "es
   const [submitting, setSubmitting] = useState(false);
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
   const [showForm, setShowForm] = useState(false);
+  const [showOwnPublicationModal, setShowOwnPublicationModal] = useState(false);
   const { user } = useAuth();
   const { showSuccess, showError } = useNotification();
 
@@ -68,7 +69,15 @@ function ProductReviews({ vendedorId, publicacionId = null, vendedorNombre = "es
       showSuccess("Reseña enviada exitosamente");
     } catch (error) {
       console.error("Error al enviar reseña:", error);
-      showError(error.message || "Error al enviar la reseña");
+      
+      const errorMessage = error?.message || "Error al enviar la reseña";
+      
+      // Mostrar modal si es su propia publicación
+      if (errorMessage.includes("propia publicación")) {
+        setShowOwnPublicationModal(true);
+      } else {
+        showError(errorMessage);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -197,6 +206,40 @@ function ProductReviews({ vendedorId, publicacionId = null, vendedorNombre = "es
           ))
         )}
       </div>
+
+      {/* Modal: No puedes reseñar tu propia publicación */}
+      {showOwnPublicationModal && (
+        <div className="review-modal-overlay">
+          <div className="review-modal-content">
+            <button
+              className="review-modal-close"
+              onClick={() => setShowOwnPublicationModal(false)}
+            >
+              ✕
+            </button>
+            <div className="review-modal-header">
+              <h2>⚠️ No puedes reseñar tu propia publicación</h2>
+            </div>
+            <div className="review-modal-body">
+              <p>
+                No es posible dejar una reseña en tus propias publicaciones. 
+                Solo los compradores pueden dejar reseñas después de realizar una compra.
+              </p>
+              <p className="review-modal-hint">
+                Esto nos ayuda a mantener la confianza en el marketplace.
+              </p>
+            </div>
+            <div className="review-modal-actions">
+              <button
+                className="review-modal-button"
+                onClick={() => setShowOwnPublicationModal(false)}
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

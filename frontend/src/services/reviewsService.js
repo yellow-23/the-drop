@@ -42,7 +42,8 @@ const reviewsService = {
       const response = await api.post(`/reviews/publicaciones/${publicacionId}`, reviewData);
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: 'Error al crear reseña' };
+      const errorData = error.response?.data;
+      throw new Error(errorData?.message || 'Error al crear reseña');
     }
   },
 

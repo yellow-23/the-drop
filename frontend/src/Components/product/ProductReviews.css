@@ -223,6 +223,133 @@
   margin: 0;
 }
 
+/* Modal: No puedes reseñar */
+.review-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.review-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  width: 100%;
+  padding: 2.5rem;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.review-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-modal-close:hover {
+  color: #333;
+}
+
+.review-modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.review-modal-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.review-modal-body {
+  margin-bottom: 2rem;
+}
+
+.review-modal-body p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.review-modal-hint {
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: 1rem !important;
+}
+
+.review-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.review-modal-button {
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #810fce 0%, #6a0dad 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.review-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 15, 206, 0.3);
+}
+
+.review-modal-button:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .reviews-header {
     flex-direction: column;
@@ -234,4 +361,10 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-}
+
+  .review-modal-content {
+    padding: 2rem;
+  }
+
+  .review-modal-header h2 {
+    font-size: 1.2rem;

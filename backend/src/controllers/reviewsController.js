@@ -61,6 +61,12 @@ exports.createPublicacionReview = async (req, res) => {
     const { rating, comment } = req.body;
     const usuarioId = req.userId;
 
+    console.log("Creando reseña:", { publicacionId, usuarioId, rating, comment });
+
+    if (!usuarioId) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+
     if (!rating || !comment || rating < 1 || rating > 5) {
       return res.status(400).json({ message: "Datos inválidos" });
     }
@@ -102,6 +108,10 @@ exports.createPublicacionReview = async (req, res) => {
       [usuarioId]
     );
 
+    if (!userResult.rows[0]) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
     const review = {
       ...result.rows[0],
       usuario_id: usuarioId,
@@ -112,7 +122,7 @@ exports.createPublicacionReview = async (req, res) => {
     res.status(201).json(review);
   } catch (error) {
     console.error("Error al crear reseña:", error);
-    res.status(500).json({ message: "Error al crear reseña" });
+    res.status(500).json({ message: "Error al crear reseña", error: error.message });
   }
 };
 
