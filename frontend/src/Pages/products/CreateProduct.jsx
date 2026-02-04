@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ProductCard from "../../Components/product/ProductCard";
 import SuccessModal from "../../Components/utils/SuccessModal";
 import publicacionesService from "../../services/publicacionesService";
+import imageUploadService from "../../services/imageUploadService";
 import brandService from "../../services/brandService";
 import sizeService from "../../services/sizeService";
 import { useAuth } from "../../Context/AuthContext";
@@ -31,6 +32,9 @@ function CreateProduct() {
   const [brands, setBrands] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
   const loadData = async () => {
@@ -53,6 +57,33 @@ function CreateProduct() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleImageSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Mostrar preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreview(event.target?.result);
+    };
+    reader.readAsDataURL(file);
+
+    // Subir imagen
+    try {
+      setUploading(true);
+      const response = await imageUploadService.uploadImage(file);
+      setFormData({
+        ...formData,
+        imagen_url: response.imageUrl,
+      });
+    } catch (error) {
+      showError(error.message || "Error al subir imagen");
+      setImagePreview(null);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -184,13 +215,39 @@ function CreateProduct() {
             </div>
 
             <div className="form-field">
-              <label>Imagen (URL)</label>
-              <input
-                name="imagen_url"
-                value={formData.imagen_url}
-                onChange={handleChange}
-                placeholder="https://..."
-              />
+              <label>Imagen</label>
+              <div className="image-upload-container">
+                {/* Preview de imagen */}
+                {(imagePreview || formData.imagen_url) && (
+                  <div className="image-preview">
+                    <img src={imagePreview || formData.imagen_url} alt="Preview" />
+                  </div>
+                )}
+                
+                {/* Subida de archivo */}
+                <div className="upload-section">
+                  <label className="upload-label">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      disabled={uploading}
+                    />
+                    <span>{uploading ? 'Subiendo...' : '📁 Seleccionar archivo'}</span>
+                  </label>
+                </div>
+
+                {/* O URL */}
+                <div className="divider">O</div>
+                
+                <input
+                  name="imagen_url"
+                  value={formData.imagen_url}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  className="url-input"
+                />
+              </div>
             </div>
 
             <div className="form-field">

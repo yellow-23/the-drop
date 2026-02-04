@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { useNotification } from "../../Context/NotificationContext";
+import imageUploadService from "../../services/imageUploadService";
 import publicacionesService from "../../services/publicacionesService";
 import ProductCard from "../../Components/product/ProductCard";
 import { useFavorites } from "../../Context/FavoritesContext";
@@ -16,7 +17,8 @@ function Profile() {
   const { showSuccess, showError } = useNotification();
   const [myProducts, setMyProducts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
-
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
     const [formData, setFormData] = useState({
       avatar: user?.avatar || "",
@@ -27,6 +29,33 @@ function Profile() {
 
   const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAvatarSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Mostrar preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setAvatarPreview(event.target?.result);
+    };
+    reader.readAsDataURL(file);
+
+    // Subir imagen
+    try {
+      setUploadingAvatar(true);
+      const response = await imageUploadService.uploadImage(file);
+      setFormData({
+        ...formData,
+        avatar: response.imageUrl,
+      });
+    } catch (error) {
+      showError(error.message || "Error al subir avatar");
+      setAvatarPreview(null);
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -206,13 +235,37 @@ function Profile() {
           <h2>Actualiza tus datos</h2>
 
           <div className="form-field">
-            <label>Avatar (URL)</label>
-            <input
-              name="avatar"
-              value={formData.avatar}
-              onChange={handleChange}
-              placeholder="https://..."
-            />
+            <label>Avatar</label>
+            <div className="avatar-upload-container">
+              {/* Preview de avatar */}
+              {(avatarPreview || formData.avatar) && (
+                <div className="avatar-preview">
+                  <img src={avatarPreview || formData.avatar} alt="Avatar Preview" />
+                </div>
+              )}
+              
+              {/* Subida de archivo */}
+              <label className="upload-label">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarSelect}
+                  disabled={uploadingAvatar}
+                />
+                <span>{uploadingAvatar ? 'Subiendo...' : '📁 Seleccionar archivo'}</span>
+              </label>
+
+              {/* O URL */}
+              <div className="divider">O</div>
+              
+              <input
+                name="avatar"
+                value={formData.avatar}
+                onChange={handleChange}
+                placeholder="https://ejemplo.com/avatar.jpg"
+                className="url-input"
+              />
+            </div>
           </div>
 
           <div className="form-field">

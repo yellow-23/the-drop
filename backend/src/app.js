@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const pool = require("./db");
@@ -13,6 +14,7 @@ const publicacionesRoutes = require("./routes/publicaciones_routes");
 const marcasRoutes = require("./routes/brand_routes");    
 const tallasRoutes = require("./routes/size_routes");
 const reviewsRoutes = require("./routes/reviews_routes");
+const imagenesRoutes = require("./routes/imagenes_routes");
 
 const app = express();
 
@@ -32,7 +34,11 @@ app.use(cors({
   },
   credentials: true
 }));
+
 app.use(express.json());
+
+// Servir archivos estáticos de uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get("/api/health", async (req, res) => {
   try {
@@ -56,5 +62,6 @@ app.use("/api/publications", publicacionesRoutes);
 app.use("/api/brands", marcasRoutes);
 app.use("/api/sizes", tallasRoutes);
 app.use("/api/reviews", reviewsRoutes);
+app.use("/api/imagenes", imagenesRoutes);
 
 module.exports = app;

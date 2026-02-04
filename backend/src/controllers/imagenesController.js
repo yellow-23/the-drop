@@ -1,5 +1,67 @@
 const pool = require("../db");
+const path = require('path');
+const fs = require('fs');
 
+exports.uploadImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        ok: false,
+        message: 'No se envió archivo'
+      });
+    }
+
+    // URL relativa que se puede usar en el frontend
+    const imageUrl = `/uploads/${req.file.filename}`;
+
+    res.status(201).json({
+      ok: true,
+      message: 'Imagen subida exitosamente',
+      imageUrl: imageUrl,
+      filename: req.file.filename
+    });
+  } catch (error) {
+    console.error('Error al subir imagen:', error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error al subir imagen',
+      error: error.message
+    });
+  }
+};
+
+exports.deleteUploadedImage = async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const filepath = path.join(__dirname, '../../uploads', filename);
+
+    // Validar que el archivo está en la carpeta uploads
+    if (!filepath.startsWith(path.join(__dirname, '../../uploads'))) {
+      return res.status(403).json({
+        ok: false,
+        message: 'Acceso denegado'
+      });
+    }
+
+    if (fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+
+    res.json({
+      ok: true,
+      message: 'Imagen eliminada'
+    });
+  } catch (error) {
+    console.error('Error al eliminar imagen:', error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error al eliminar imagen',
+      error: error.message
+    });
+  }
+};
+
+// Legacy: Funciones antiguas para compatibilidad (opcional)
 exports.getImagenes = async (req, res) => {
   try {
     const productId = parseInt(req.params.productId);
@@ -126,3 +188,4 @@ exports.deleteImagen = async (req, res) => {
     });
   }
 };
+
