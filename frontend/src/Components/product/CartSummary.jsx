@@ -1,11 +1,23 @@
 import './CartSummary.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Context/AuthContext';
+import { useLoginModal } from '../../Context/LoginModalContext';
 
 function CartSummary({ total, itemCount, onClear, showCheckoutButton = true }) {
   const subtotal = total;
   const envio = total > 50000 ? 0 : 5000;
   const totalFinal = subtotal + envio;
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openLoginModal } = useLoginModal();
+
+  const handleCheckout = () => {
+    if (!user) {
+      openLoginModal("Debes iniciar sesión para proceder con tu compra");
+      return;
+    }
+    navigate("/checkout");
+  };
 
   return (
     <div className="cart-summary">
@@ -37,9 +49,8 @@ function CartSummary({ total, itemCount, onClear, showCheckoutButton = true }) {
       </div>
 
       {showCheckoutButton && (
-        <button className="btn-checkout"
-        onClick={() => navigate("/checkout")}>
-          Ir al Checkout
+        <button className="btn-checkout" onClick={handleCheckout}>
+          Ir a Pagar
         </button>
       )}
 

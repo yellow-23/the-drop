@@ -3,6 +3,9 @@ import { useFavorites } from "../../Context/FavoritesContext";
 import "./ProductCard.css";
 import { useContext } from "react";
 import { CartContext } from "../../Context/CartContext";
+import { useAuth } from "../../Context/AuthContext";
+import { useLoginModal } from "../../Context/LoginModalContext";
+import { useNotification } from "../../Context/NotificationContext";
 
 function ProductCard({
   id,
@@ -23,8 +26,29 @@ function ProductCard({
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(id);
   const { addToCart } = useContext(CartContext);
+  const { user } = useAuth();
+  const { openLoginModal } = useLoginModal();
+  const { showSuccess, showError } = useNotification();
   const isOutOfStock = !stock || stock <= 0;
 
+  const handleAddToCart = () => {
+    if (!user) {
+      openLoginModal("Debes iniciar sesión para agregar productos al carrito");
+      return;
+    }
+
+    if (isOutOfStock) {
+      showError("Este producto está agotado");
+      return;
+    }
+
+    try {
+      addToCart("publicacion", null, id, 1);
+      showSuccess("Producto agregado al carrito");
+    } catch (error) {
+      showError(error.message || "Error al agregar al carrito");
+    }
+  };
 
   return (
     <div className="product-card">
@@ -110,9 +134,7 @@ function ProductCard({
       <div className="product-actions">
         <button
           className="product-btn product-btn-carrito"
-          onClick={() =>
-            addToCart("publicacion", null, id, 1)
-          }
+          onClick={handleAddToCart}
           disabled={isOutOfStock}
           title={isOutOfStock ? "Producto agotado" : "Agregar al carrito"}
         >

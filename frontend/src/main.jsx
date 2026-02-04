@@ -9,20 +9,23 @@ import { CartProvider } from "./Context/CartContext.jsx";
 import { AuthProvider } from './Context/AuthContext.jsx'
 import { FavoritesProvider } from './Context/FavoritesContext.jsx'
 import { NotificationProvider } from './Context/NotificationContext.jsx'
+import { LoginModalProvider } from './Context/LoginModalContext.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <NotificationProvider>
-      <CartProvider>
-        <AuthProvider>
-          <FavoritesProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </FavoritesProvider>
-        </AuthProvider>
-      </CartProvider>
+      <AuthProvider>
+        <LoginModalProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </FavoritesProvider>
+          </CartProvider>
+        </LoginModalProvider>
+      </AuthProvider>
     </NotificationProvider>
   </React.StrictMode>
 )

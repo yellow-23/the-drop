@@ -5,6 +5,8 @@ import reviewsService from "../../services/reviewsService";
 import { CartContext } from "../../Context/CartContext";
 import { useFavorites } from "../../Context/FavoritesContext";
 import { useNotification } from "../../Context/NotificationContext";
+import { useAuth } from "../../Context/AuthContext";
+import { useLoginModal } from "../../Context/LoginModalContext";
 import ProductReviews from "../../Components/product/ProductReviews";
 import "./ProductDetail.css";
 
@@ -14,6 +16,8 @@ function ProductDetail() {
   const { addToCart } = useContext(CartContext);
   const { toggleFavorite, isFavorite } = useFavorites();
   const { showSuccess, showError } = useNotification();
+  const { user } = useAuth();
+  const { openLoginModal } = useLoginModal();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,12 +62,22 @@ function ProductDetail() {
   const isOutOfStock = !product.stock || product.stock <= 0;
 
   const handleAddToCart = () => {
+    if (!user) {
+      openLoginModal("Debes iniciar sesión para agregar productos al carrito");
+      return;
+    }
+
     if (isOutOfStock) {
       showError("Este producto está agotado");
       return;
     }
-    addToCart("publicacion", null, product.id, 1);
-    showSuccess("Producto agregado al carrito");
+
+    try {
+      addToCart("publicacion", null, product.id, 1);
+      showSuccess("Producto agregado al carrito");
+    } catch (error) {
+      showError(error.message || "Error al agregar al carrito");
+    }
   };
 
   const handleToggleFavorite = () => {

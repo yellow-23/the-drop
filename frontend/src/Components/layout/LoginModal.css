@@ -1,0 +1,189 @@
+.login-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.login-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  padding: 2.5rem;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.login-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-modal-close:hover {
+  color: #333;
+}
+
+.login-modal-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.login-modal-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #810fce 0%, #6a0dad 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.login-modal-message {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0 0;
+  line-height: 1.5;
+}
+
+.login-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.login-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-modal-field label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.login-modal-field input {
+  padding: 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.login-modal-field input:focus {
+  outline: none;
+  border-color: #810fce;
+  box-shadow: 0 0 0 3px rgba(129, 15, 206, 0.1);
+}
+
+.login-modal-button {
+  padding: 1rem;
+  background: linear-gradient(135deg, #810fce 0%, #6a0dad 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+}
+
+.login-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(129, 15, 206, 0.3);
+}
+
+.login-modal-button:active {
+  transform: translateY(0);
+}
+
+.login-modal-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.login-modal-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #810fce;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: inherit;
+}
+
+.link-button:hover {
+  color: #6a0dad;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-modal-content {
+    max-width: 95%;
+    padding: 2rem;
+  }
+
+  .login-modal-header h2 {
+    font-size: 1.5rem;
+  }
+}
