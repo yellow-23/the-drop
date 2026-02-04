@@ -27,6 +27,8 @@ export function AuthProvider({ children }) {
   const updateProfile = async (data) => {
     const updateUser = await authService.updateProfile(data);
     setUser(updateUser);
+    // Force localStorage update para sincronización inmediata
+    localStorage.setItem('user', JSON.stringify(updateUser));
   };
 
   const fetchProfile = async () => {

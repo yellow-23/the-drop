@@ -46,10 +46,15 @@ function Profile() {
     try {
       setUploadingAvatar(true);
       const response = await imageUploadService.uploadImage(file);
-      setFormData({
+      const newFormData = {
         ...formData,
         avatar: response.imageUrl,
-      });
+      };
+      setFormData(newFormData);
+      
+      // Actualizar perfil automáticamente
+      await updateProfile(newFormData);
+      showSuccess("Avatar actualizado");
     } catch (error) {
       showError(error.message || "Error al subir avatar");
       setAvatarPreview(null);
