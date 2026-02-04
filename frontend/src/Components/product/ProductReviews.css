@@ -368,3 +368,14 @@
 
   .review-modal-header h2 {
     font-size: 1.2rem;
+  }
+
+  .review-form {
+    padding: 1rem;
+  }
+
+  .review-modal-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+  }
+}
