@@ -131,7 +131,7 @@ function Profile() {
 
   return (
     <div className="container-fluid profile-page">
-      <div className="row">
+      <div className="row g-0">
         
         {/* SIDEBAR */}
         <aside className="col-12 col-md-3 profile-sidebar">
@@ -324,12 +324,17 @@ function Profile() {
     </div>
   </>
 )}
-    <footer>
+    <footer className="desktop-footer">
       <div className="text-center text-muted">
           <small>© {new Date().getFullYear()} The Drop</small>
         </div>
-    </footer>
-        </main>
+    </footer>  
+    </main>
+    <footer className="mobile-footer">
+      <div className="text-center text-muted">
+          <small>© {new Date().getFullYear()} The Drop</small>
+        </div>
+    </footer>  
       </div>
     </div>
     

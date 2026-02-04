@@ -310,6 +310,9 @@
 @media (max-width: 768px) {
   .checkout-wrapper {
     grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
   .form-row {
@@ -321,11 +324,30 @@
     order: -1;
   }
 
+  .checkout-form-section,
+  .checkout-summary-section {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+   .checkout-form-section input,
+  .checkout-form-section select {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .form-actions {
     flex-direction: column;
   }
 
   .btn-pagar, .btn-volver {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
   }
+
+.checkout-container {
+  padding: 0;
+}  
+
 }

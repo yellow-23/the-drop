@@ -171,6 +171,7 @@
   .nav-links {
     gap: 16px;
     margin-left: 0;
+    display: none;
   }
 
   .nav-links a {
