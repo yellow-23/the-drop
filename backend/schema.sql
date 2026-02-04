@@ -179,23 +179,3 @@ INSERT INTO tallas_cl (talla_cl) VALUES
 (42.0),
 (43.0),
 (44.0);
-
-INSERT INTO usuarios (nombre, email, password_hash, region, comuna, reputacion, creado_en) VALUES 
-('Juan Test', 'juan@test.com', '$2a$10$test', 'Región Metropolitana', 'Santiago', 5.0, NOW());
-
-INSERT INTO productos (usuario_id, marca_id, titulo, modelo, descripcion, creado_en) VALUES 
-(1, 1, 'Nike Air Force 1', 'AF1 Classic', 'Zapatillas clásicas de Nike', NOW());
-
-INSERT INTO imagenes_producto (producto_id, url_imagen) VALUES 
-(1, '');
-
-INSERT INTO variantes_producto (producto_id, talla_id, precio_clp, stock) VALUES 
-(1, 6, 45000, 10),
-(1, 7, 45000, 8),
-(1, 8, 45000, 5);
-
-INSERT INTO publicaciones_usuario (usuario_id, marca_id, talla_id, titulo, modelo, genero, condicion, precio_clp, descripcion, estado, region, comuna, co2_ahorrado_kg, veces_revendido, tipo_entrega, creado_en) VALUES 
-(1, 2, 5, 'Adidas Stan Smith', 'Stan Smith White', 'Unisex', 'Como nueva', 35000, 'Zapatillas Adidas Stan Smith en perfecto estado, solo usadas 2 veces', 'activa', 'Región Metropolitana', 'Santiago', 2.5, 0, 'Presencial y envío', NOW());
-
-INSERT INTO imagenes_publicacion_usuario (publicacion_id, url_imagen) VALUES 
-(1, 'https://assets.adidas.com/images/w_600,f_auto,q_auto/270b920981c14ac0a8b4ac72011dd318_9366/Zapatillas_Stan_Smith_Blanco_FX7524_01_00_standard.jpg');
