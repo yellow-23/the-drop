@@ -1,4 +1,5 @@
 import api from './api';
+import { getAbsoluteImageUrl } from '../utils/imageUrlHelper';
 
 const imageUploadService = {
   uploadImage: async (file) => {
@@ -12,7 +13,10 @@ const imageUploadService = {
         },
       });
 
-      return response.data;
+      return {
+        ...response.data,
+        imageUrl: getAbsoluteImageUrl(response.data.imageUrl),
+      };
     } catch (error) {
       throw error.response?.data || { message: 'Error al subir imagen' };
     }

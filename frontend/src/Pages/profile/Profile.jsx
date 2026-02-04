@@ -27,6 +27,18 @@ function Profile() {
       comuna: user?.comuna || "",
     });
 
+  // Sincronizar formData cuando cambia el usuario
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        avatar: user.avatar || "",
+        nombre: user.nombre || "",
+        region: user.region || "",
+        comuna: user.comuna || "",
+      });
+    }
+  }, [user?.id, user?.avatar, user?.nombre, user?.region, user?.comuna]);
+
   const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
   };
