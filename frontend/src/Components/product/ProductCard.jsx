@@ -128,7 +128,7 @@ function ProductCard({
           {marca}
         </p>
 
-        <p className="product-price">${precio_clp}</p>
+        <p className="product-price">${Number(precio_clp).toLocaleString('es-CL')}</p>
       </div>
 
       <div className="product-actions">
