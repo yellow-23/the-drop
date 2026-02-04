@@ -4,7 +4,7 @@ import { useNotification } from "../../Context/NotificationContext";
 import reviewsService from "../../services/reviewsService";
 import "./ProductReviews.css";
 
-function ProductReviews({ productId, publicacionId = null }) {
+function ProductReviews({ vendedorId, publicacionId = null, vendedorNombre = "este vendedor" }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -13,18 +13,17 @@ function ProductReviews({ productId, publicacionId = null }) {
   const { user } = useAuth();
   const { showSuccess, showError } = useNotification();
 
-  // Cargar reseñas
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         setLoading(true);
         let data;
-        if (publicacionId) {
+        if (vendedorId) {
+          data = await reviewsService.getVendedorReviews(vendedorId);
+        } else if (publicacionId) {
           data = await reviewsService.getPublicacionReviews(publicacionId);
-        } else {
-          data = await reviewsService.getProductReviews(productId);
         }
-        setReviews(data);
+        setReviews(data || []);
       } catch (error) {
         console.error("Error cargando reseñas:", error);
         setReviews([]);
@@ -33,10 +32,10 @@ function ProductReviews({ productId, publicacionId = null }) {
       }
     };
 
-    if (productId || publicacionId) {
+    if (vendedorId || publicacionId) {
       fetchReviews();
     }
-  }, [productId, publicacionId]);
+  }, [vendedorId, publicacionId]);
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
@@ -51,21 +50,17 @@ function ProductReviews({ productId, publicacionId = null }) {
       return;
     }
 
+    if (!publicacionId) {
+      showError("Debes comprar algo del vendedor para reseñar");
+      return;
+    }
+
     try {
       setSubmitting(true);
-      let createdReview;
-
-      if (publicacionId) {
-        createdReview = await reviewsService.createPublicacionReview(publicacionId, {
-          rating: newReview.rating,
-          comment: newReview.comment,
-        });
-      } else {
-        createdReview = await reviewsService.createProductReview(productId, {
-          rating: newReview.rating,
-          comment: newReview.comment,
-        });
-      }
+      const createdReview = await reviewsService.createPublicacionReview(publicacionId, {
+        rating: newReview.rating,
+        comment: newReview.comment,
+      });
 
       setReviews([createdReview, ...reviews]);
       setNewReview({ rating: 5, comment: "" });
@@ -114,7 +109,7 @@ function ProductReviews({ productId, publicacionId = null }) {
   return (
     <div className="reviews-section">
       <div className="reviews-header">
-        <h3>Reseñas ({reviews.length})</h3>
+        <h3>Reseñas del vendedor ({reviews.length})</h3>
         {reviews.length > 0 && (
           <div className="rating-summary">
             <div className="average-rating">
@@ -131,10 +126,10 @@ function ProductReviews({ productId, publicacionId = null }) {
           onClick={() => setShowForm(!showForm)}
           disabled={submitting}
         >
-          {showForm ? "Cerrar" : "Escribir Reseña"}
+          {showForm ? "Cerrar" : `Reseñar a ${vendedorNombre}`}
         </button>
       ) : (
-        <p className="login-prompt">Inicia sesión para dejar una reseña</p>
+        <p className="login-prompt">Inicia sesión para dejar una reseña del vendedor</p>
       )}
 
       {showForm && user && (

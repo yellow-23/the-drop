@@ -13,6 +13,7 @@ function ProductCard({
   marca,
   talla,
   imagen,
+  stock,
   showDelete = false,
   showEdit = false,
   onDelete,
@@ -22,6 +23,7 @@ function ProductCard({
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(id);
   const { addToCart } = useContext(CartContext);
+  const isOutOfStock = !stock || stock <= 0;
 
 
   return (
@@ -75,6 +77,16 @@ function ProductCard({
           src={imagen || "/images/placeholder-shoe.png"}
           alt={titulo}
         />
+        {isOutOfStock && (
+          <div className="out-of-stock-overlay">
+            <span className="sold-badge">AGOTADO</span>
+          </div>
+        )}
+        {!isOutOfStock && stock && (
+          <div className="stock-badge">
+            {stock === 1 ? "1 disponible" : stock <= 3 ? `${stock} disponibles` : "3+ disponibles"}
+          </div>
+        )}
       </div>
 
       <div className="product-info">
@@ -101,8 +113,10 @@ function ProductCard({
           onClick={() =>
             addToCart("publicacion", null, id, 1)
           }
+          disabled={isOutOfStock}
+          title={isOutOfStock ? "Producto agotado" : "Agregar al carrito"}
         >
-          AGREGAR AL CARRITO
+          {isOutOfStock ? "AGOTADO" : "AGREGAR AL CARRITO"}
         </button>
 
         <button

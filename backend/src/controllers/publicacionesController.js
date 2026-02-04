@@ -18,9 +18,11 @@ exports.getPublicaciones = async (req, res) => {
         pu.comuna,
         pu.co2_ahorrado_kg,
         pu.veces_revendido,
+        pu.stock,
         m.nombre as marca,
         tc.talla_cl as talla,
         u.nombre as usuario,
+        u.id as usuario_id,
         u.reputacion,
         pu.creado_en,
         COALESCE(
@@ -35,7 +37,7 @@ exports.getPublicaciones = async (req, res) => {
       LEFT JOIN marcas m ON pu.marca_id = m.id
       LEFT JOIN tallas_cl tc ON pu.talla_id = tc.id
       LEFT JOIN usuarios u ON pu.usuario_id = u.id
-      WHERE pu.estado = 'activa'
+      WHERE pu.estado = 'activa' AND pu.stock > 0
     `;
 
     const conditions = [];
@@ -114,8 +116,10 @@ exports.getPublicacionById = async (req, res) => {
         pu.co2_ahorrado_kg,
         pu.veces_revendido,
         pu.tipo_entrega,
+        pu.stock,
         m.nombre as marca,
         tc.talla_cl as talla,
+        u.id as usuario_id,
         u.nombre as usuario,
         u.reputacion,
         (SELECT json_agg(url_imagen)
@@ -166,12 +170,21 @@ exports.createPublicacion = async (req, res) => {
       talla_id,
       tipo_entrega,
       imagen_url,
+      stock,
     } = req.body;
 
     if (!titulo || !precio_clp) {
       return res.status(400).json({
         ok: false,
         message: "Título y precio son requeridos",
+      });
+    }
+
+    const stockValue = stock ? Number(stock) : 1;
+    if (stockValue < 1) {
+      return res.status(400).json({
+        ok: false,
+        message: "La cantidad disponible debe ser al menos 1",
       });
     }
 
@@ -189,10 +202,11 @@ exports.createPublicacion = async (req, res) => {
         region,
         comuna,
         tipo_entrega,
+        stock,
         creado_en
       )
       VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14
       )
       RETURNING *`,
       [
@@ -208,6 +222,7 @@ exports.createPublicacion = async (req, res) => {
         region || null,
         comuna || null,
         tipo_entrega || null,
+        stockValue,
         new Date()
       ]
     );

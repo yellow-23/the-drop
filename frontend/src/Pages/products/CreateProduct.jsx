@@ -19,6 +19,7 @@ const emptyProduct = {
   marca_id: "",
   talla_id: "",
   imagen_url: "",
+  stock: "1",
 };
 
 function CreateProduct() {
@@ -72,11 +73,12 @@ function CreateProduct() {
   marca_id: formData.marca_id,
   talla_id: formData.talla_id,
   imagen_url: formData.imagen_url,
+  stock: Number(formData.stock),
 };
 
       const response = await publicacionesService.createPublicacion(payload);
-      etShowModal(trueación creada exitosamente");
-      navigate("/catalog");
+      
+      setShowModal(true);
     } catch (error) {
       console.error(error);
       showError(error.message || "Error al publicar el producto");
@@ -166,6 +168,18 @@ function CreateProduct() {
                 name="precio_clp"
                 value={formData.precio_clp}
                 onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-field">
+              <label>Cantidad Disponible</label>
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                min="1"
+                required
               />
             </div>
 

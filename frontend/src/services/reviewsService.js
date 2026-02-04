@@ -1,9 +1,9 @@
 import api from './api';
 
 const reviewsService = {
-  getProductReviews: async (productId) => {
+  getVendedorReviews: async (vendedorId) => {
     try {
-      const response = await api.get(`/reviews/productos/${productId}`);
+      const response = await api.get(`/reviews/vendedores/${vendedorId}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Error al obtener reseñas' };
@@ -19,9 +19,9 @@ const reviewsService = {
     }
   },
 
-  getProductRating: async (productId) => {
+  getVendedorRating: async (vendedorId) => {
     try {
-      const response = await api.get(`/reviews/productos/${productId}/rating`);
+      const response = await api.get(`/reviews/vendedores/${vendedorId}/rating`);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Error al obtener rating' };
@@ -34,15 +34,6 @@ const reviewsService = {
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Error al obtener rating' };
-    }
-  },
-
-  createProductReview: async (productId, reviewData) => {
-    try {
-      const response = await api.post(`/reviews/productos/${productId}`, reviewData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || { message: 'Error al crear reseña' };
     }
   },
 

@@ -3,9 +3,8 @@ const router = express.Router();
 const reviewsController = require("../controllers/reviewsController");
 const { verifyToken } = require("../middlewares/authMiddleware");
 
-router.get("/productos/:productId", reviewsController.getProductReviews);
-router.get("/productos/:productId/rating", reviewsController.getProductRating);
-router.post("/productos/:productId", verifyToken, reviewsController.createProductReview);
+router.get("/vendedores/:vendedorId", reviewsController.getVendedorReviews);
+router.get("/vendedores/:vendedorId/rating", reviewsController.getVendedorRating);
 
 router.get("/publicaciones/:publicacionId", reviewsController.getPublicacionReviews);
 router.get("/publicaciones/:publicacionId/rating", reviewsController.getPublicacionRating);

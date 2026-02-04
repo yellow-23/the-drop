@@ -12,7 +12,7 @@ exports.verifyToken = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "tu_secret_key");
-    req.user = { id: decoded.id };
+    req.userId = decoded.id;
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

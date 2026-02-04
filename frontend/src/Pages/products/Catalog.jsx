@@ -198,6 +198,7 @@ function Catalog() {
                       marca={producto.marca || "—"}
                       precio_clp={producto.precio_clp}
                       condicion={producto.condicion}
+                      stock={producto.stock}
                     />
                   ))}
                   {totalPaginas > 1 && (

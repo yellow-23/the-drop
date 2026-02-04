@@ -55,8 +55,13 @@ function ProductDetail() {
   }
 
   const isFav = isFavorite(product.id);
+  const isOutOfStock = !product.stock || product.stock <= 0;
 
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      showError("Este producto está agotado");
+      return;
+    }
     addToCart("publicacion", null, product.id, 1);
     showSuccess("Producto agregado al carrito");
   };
@@ -133,7 +138,9 @@ function ProductDetail() {
             </div>
             <div className="spec-item">
               <span className="spec-label">Disponibilidad</span>
-              <span className="spec-value in-stock">En Stock</span>
+              <span className={`spec-value ${isOutOfStock ? 'out-of-stock' : 'in-stock'}`}>
+                {isOutOfStock ? 'Agotado' : (product.stock === 1 ? '1 unidad disponible' : `${product.stock} unidades disponibles`)}
+              </span>
             </div>
           </div>
 
@@ -153,8 +160,12 @@ function ProductDetail() {
           </div>
 
           <div className="detail-actions">
-            <button onClick={handleAddToCart} className="btn-add-to-cart">
-              Agregar al Carrito
+            <button 
+              onClick={handleAddToCart} 
+              className="btn-add-to-cart"
+              disabled={isOutOfStock}
+            >
+              {isOutOfStock ? 'Producto Agotado' : 'Agregar al Carrito'}
             </button>
             <button
               onClick={() => navigate("/cart")}
@@ -172,7 +183,11 @@ function ProductDetail() {
         </div>
       </div>
 
-      <ProductReviews publicacionId={product.id} />
+      <ProductReviews 
+        publicacionId={product.id} 
+        vendedorId={product.usuario_id}
+        vendedorNombre={product.usuario}
+      />
     </div>
   );
 }

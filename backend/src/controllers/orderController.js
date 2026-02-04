@@ -50,6 +50,31 @@ exports.createOrder = async (req, res) => {
       });
     }
 
+    // Validar disponibilidad de stock para publicaciones
+    for (const item of itemsResult.rows) {
+      if (item.tipo_item === 'publicacion' && item.publicacion_id) {
+        const stockResult = await pool.query(
+          `SELECT stock FROM publicaciones_usuario WHERE id = $1`,
+          [item.publicacion_id]
+        );
+
+        if (stockResult.rows.length === 0) {
+          return res.status(404).json({
+            ok: false,
+            message: `Publicación ${item.publicacion_id} no encontrada`,
+          });
+        }
+
+        const currentStock = stockResult.rows[0].stock || 0;
+        if (currentStock < item.cantidad) {
+          return res.status(400).json({
+            ok: false,
+            message: `Stock insuficiente para la publicación. Disponibles: ${currentStock}, solicitados: ${item.cantidad}`,
+          });
+        }
+      }
+    }
+
     const totalClp = itemsResult.rows.reduce((sum, item) => {
       return sum + (item.precio * item.cantidad);
     }, 0);
@@ -63,12 +88,24 @@ exports.createOrder = async (req, res) => {
       [ordenId, userId, totalClp, "pendiente", region_envio, comuna_envio, direccion, new Date()]
     );
 
+    // Procesar items y deducir stock
     for (const item of itemsResult.rows) {
       await pool.query(
         `INSERT INTO items_orden (id, orden_id, tipo_item, variante_producto_id, publicacion_id, cantidad, precio_snapshot_clp)
          VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [Date.now(), ordenId, item.tipo_item, item.variante_producto_id || null, item.publicacion_id || null, item.cantidad, item.precio]
       );
+
+      // Deducir stock para publicaciones
+      if (item.tipo_item === 'publicacion' && item.publicacion_id) {
+        await pool.query(
+          `UPDATE publicaciones_usuario 
+           SET stock = stock - $1,
+               estado = CASE WHEN (stock - $1) <= 0 THEN 'vendida' ELSE estado END
+           WHERE id = $2`,
+          [item.cantidad, item.publicacion_id]
+        );
+      }
     }
 
     await pool.query("DELETE FROM items_carrito WHERE carrito_id = $1", [carroId]);

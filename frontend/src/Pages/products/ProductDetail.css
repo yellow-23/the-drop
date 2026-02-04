@@ -230,6 +230,12 @@
   color: #4caf50;
 }
 
+.spec-value.out-of-stock {
+  color: #f44336;
+  font-weight: 800;
+}
+
+
 .product-description h3,
 .product-benefits h3 {
   font-size: 1.2rem;
@@ -301,6 +307,18 @@
   background: #810fce;
   color: #fff;
 }
+
+.btn-add-to-cart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #ccc 0%, #999 100%);
+}
+
+.btn-add-to-cart:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 
 .shipping-info {
   display: flex;
