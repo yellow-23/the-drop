@@ -41,19 +41,19 @@ function Catalog() {
       return false;
     }
 
-    if (filtros.marca && !product.marca?.nombre.toLowerCase().includes(filtros.marca.toLowerCase())) {
+    if (filtros.marca && !product.marca?.toLowerCase().includes(filtros.marca.toLowerCase())) {
       return false;
     }
 
-    if (filtros.precioMin && product.precio < parseFloat(filtros.precioMin)) {
+    if (filtros.precioMin && product.precio_clp < parseFloat(filtros.precioMin)) {
       return false;
     }
 
-    if (filtros.precioMax && product.precio > parseFloat(filtros.precioMax)) {
+    if (filtros.precioMax && product.precio_clp > parseFloat(filtros.precioMax)) {
       return false;
     }
 
-    if (filtros.talla && !product.talla?.nombre.toLowerCase().includes(filtros.talla.toLowerCase())) {
+    if (filtros.talla && String(product.talla) !== String(filtros.talla)) {
       return false;
     }
 

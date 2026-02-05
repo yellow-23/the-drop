@@ -10,17 +10,23 @@ const favoritesService = {
     }
   },
 
-  addFavorito: async (tipoItem, productoId = null, publicacionId = null) => {
+  addFavorito: async (tipoItem, itemId) => {
     try {
       const payload = {
         tipo_item: tipoItem,
       };
-      if (productoId) payload.producto_id = productoId;
-      if (publicacionId) payload.publicacion_id = publicacionId;
+      if (tipoItem === 'producto') {
+        payload.producto_id = itemId;
+      } else if (tipoItem === 'publicacion') {
+        payload.publicacion_id = itemId;
+      }
 
+      console.log('🔵 Enviando favorito:', payload);
       const response = await api.post('/favorites', payload);
+      console.log('✅ Favorito agregado:', response.data);
       return response.data;
     } catch (error) {
+      console.error('❌ Error al agregar favorito:', error.response?.data || error.message);
       throw error.response?.data || { message: 'Error al agregar a favoritos' };
     }
   },

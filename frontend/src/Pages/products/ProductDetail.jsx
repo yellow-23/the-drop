@@ -86,6 +86,11 @@ function ProductDetail() {
       titulo: product.titulo,
       precio_clp: product.precio_clp,
       marca: product.marca,
+      genero: product.genero,
+      condicion: product.condicion,
+      talla: product.talla,
+      stock: product.stock,
+      imagen: product.imagenes?.[0],
     });
   };
 

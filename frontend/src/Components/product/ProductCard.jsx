@@ -32,7 +32,6 @@ function ProductCard({
   const hasStockInfo = typeof stock === "number"; 
   const isOutOfStock = hasStockInfo && stock <= 0;
 
-
   const handleAddToCart = () => {
     if (!user) {
       openLoginModal("Debes iniciar sesión para agregar productos al carrito");

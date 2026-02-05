@@ -5,47 +5,60 @@ exports.getFavoritos = async (req, res) => {
     const userId = req.userId;
 
     const result = await pool.query(
-      `SELECT 
-        f.id as favorito_id,
+      `
+      SELECT 
+        f.id AS favorito_id,
         f.tipo_item,
         f.creado_en,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.id
-        END as id,
+        END AS id,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.titulo
-        END as titulo,
+        END AS titulo,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.precio_clp
-        END as precio_clp,
+        END AS precio_clp,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.condicion
-        END as condicion,
+        END AS condicion,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.genero
-        END as genero,
+        END AS genero,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN m.nombre
-        END as marca,
+        END AS marca,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN t.talla_cl
-        END as talla,
+        END AS talla,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.stock
-        END as stock,
+        END AS stock,
+
         CASE 
           WHEN f.tipo_item = 'publicacion' THEN (
-            SELECT url_imagen FROM imagenes_publicacion_usuario 
-            WHERE publicacion_id = pu.id 
+            SELECT url_imagen
+            FROM imagenes_publicacion_usuario
+            WHERE publicacion_id = pu.id
             LIMIT 1
           )
-        END as imagen
-       FROM favoritos f
-       LEFT JOIN publicaciones_usuario pu ON f.publicacion_id = pu.id
-       LEFT JOIN marcas m ON pu.marca_id = m.id
-       LEFT JOIN tallas_cl t ON pu.talla_id = t.id
-       WHERE f.usuario_id = $1
-       ORDER BY f.creado_en DESC`,
+        END AS imagen
+
+      FROM favoritos f
+        LEFT JOIN publicaciones_usuario pu ON f.publicacion_id = pu.id
+        LEFT JOIN marcas m ON pu.marca_id = m.id
+        LEFT JOIN tallas_cl t ON pu.talla_id = t.id
+      WHERE f.usuario_id = $1
+      ORDER BY f.creado_en DESC
+      `,
       [userId]
     );
 
@@ -63,6 +76,7 @@ exports.getFavoritos = async (req, res) => {
     });
   }
 };
+
 
 exports.addFavorito = async (req, res) => {
   try {
@@ -90,23 +104,27 @@ exports.addFavorito = async (req, res) => {
       });
     }
 
-    // Verificar que el producto/publicación existe
+    // Verificar existencia
     if (tipo_item === "producto") {
       const productResult = await pool.query(
         "SELECT id FROM productos WHERE id = $1",
         [producto_id]
       );
+
       if (productResult.rows.length === 0) {
         return res.status(404).json({
           ok: false,
           message: "Producto no encontrado",
         });
       }
-    } else if (tipo_item === "publicacion") {
+    }
+
+    if (tipo_item === "publicacion") {
       const pubResult = await pool.query(
         "SELECT id FROM publicaciones_usuario WHERE id = $1",
         [publicacion_id]
       );
+
       if (pubResult.rows.length === 0) {
         return res.status(404).json({
           ok: false,
@@ -115,11 +133,15 @@ exports.addFavorito = async (req, res) => {
       }
     }
 
-    // Verificar que no está ya en favoritos
+    // Verificar duplicado
     const existingResult = await pool.query(
-      `SELECT id FROM favoritos 
-       WHERE usuario_id = $1 AND tipo_item = $2 
-       AND (producto_id = $3 OR publicacion_id = $4)`,
+      `
+      SELECT id
+      FROM favoritos
+      WHERE usuario_id = $1
+        AND tipo_item = $2
+        AND (producto_id = $3 OR publicacion_id = $4)
+      `,
       [userId, tipo_item, producto_id || null, publicacion_id || null]
     );
 
@@ -130,13 +152,25 @@ exports.addFavorito = async (req, res) => {
       });
     }
 
-    const favoritoId = Date.now();
-
     const result = await pool.query(
-      `INSERT INTO favoritos (id, usuario_id, tipo_item, producto_id, publicacion_id, creado_en)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING *`,
-      [favoritoId, userId, tipo_item, producto_id || null, publicacion_id || null, new Date()]
+      `
+      INSERT INTO favoritos (
+        usuario_id,
+        tipo_item,
+        producto_id,
+        publicacion_id,
+        creado_en
+      )
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+      `,
+      [
+        userId,
+        tipo_item,
+        producto_id || null,
+        publicacion_id || null,
+        new Date(),
+      ]
     );
 
     res.status(201).json({
@@ -159,6 +193,13 @@ exports.removeFavorito = async (req, res) => {
     const userId = req.userId;
     const { favoritoId } = req.params;
 
+    if (!favoritoId) {
+      return res.status(400).json({
+        ok: false,
+        message: "favoritoId es requerido",
+      });
+    }
+
     const favoritoResult = await pool.query(
       "SELECT usuario_id FROM favoritos WHERE id = $1",
       [favoritoId]
@@ -171,7 +212,7 @@ exports.removeFavorito = async (req, res) => {
       });
     }
 
-    if (favoritoResult.rows[0].usuario_id !== userId) {
+    if (Number(favoritoResult.rows[0].usuario_id) !== Number(userId)) {
       return res.status(403).json({
         ok: false,
         message: "No autorizado",
