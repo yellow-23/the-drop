@@ -29,7 +29,9 @@ function ProductCard({
   const { user } = useAuth();
   const { openLoginModal } = useLoginModal();
   const { showSuccess, showError } = useNotification();
-  const isOutOfStock = !stock || stock <= 0;
+  const hasStockInfo = typeof stock === "number"; 
+  const isOutOfStock = hasStockInfo && stock <= 0;
+
 
   const handleAddToCart = () => {
     if (!user) {
