@@ -19,9 +19,8 @@ const imagenesRoutes = require("./routes/imagenes_routes");
 const app = express();
 
 const allowedOrigins = [
-  'http://localhost:5173', // Desarrollo local
-  'http://localhost:3000', // Desarrollo local backend
-  process.env.FRONTEND_URL || 'http://localhost:5173' // Producción
+  'http://localhost:3000',
+  process.env.FRONTEND_URL || 'http://localhost:5173'
 ];
 
 app.use(cors({

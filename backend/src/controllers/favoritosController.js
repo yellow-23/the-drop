@@ -6,20 +6,44 @@ exports.getFavoritos = async (req, res) => {
 
     const result = await pool.query(
       `SELECT 
-        f.id,
+        f.id as favorito_id,
         f.tipo_item,
         f.creado_en,
         CASE 
-          WHEN f.tipo_item = 'producto' THEN p.titulo
+          WHEN f.tipo_item = 'publicacion' THEN pu.id
+        END as id,
+        CASE 
           WHEN f.tipo_item = 'publicacion' THEN pu.titulo
         END as titulo,
         CASE 
-          WHEN f.tipo_item = 'producto' THEN p.id
-          WHEN f.tipo_item = 'publicacion' THEN pu.id
-        END as item_id
+          WHEN f.tipo_item = 'publicacion' THEN pu.precio_clp
+        END as precio_clp,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN pu.condicion
+        END as condicion,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN pu.genero
+        END as genero,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN m.nombre
+        END as marca,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN t.talla_cl
+        END as talla,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN pu.stock
+        END as stock,
+        CASE 
+          WHEN f.tipo_item = 'publicacion' THEN (
+            SELECT url_imagen FROM imagenes_publicacion_usuario 
+            WHERE publicacion_id = pu.id 
+            LIMIT 1
+          )
+        END as imagen
        FROM favoritos f
-       LEFT JOIN productos p ON f.producto_id = p.id
        LEFT JOIN publicaciones_usuario pu ON f.publicacion_id = pu.id
+       LEFT JOIN marcas m ON pu.marca_id = m.id
+       LEFT JOIN tallas_cl t ON pu.talla_id = t.id
        WHERE f.usuario_id = $1
        ORDER BY f.creado_en DESC`,
       [userId]
