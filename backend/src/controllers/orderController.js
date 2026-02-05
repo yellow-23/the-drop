@@ -79,21 +79,21 @@ exports.createOrder = async (req, res) => {
       return sum + (item.precio * item.cantidad);
     }, 0);
 
-    const ordenId = Date.now();
-
     const ordenResult = await pool.query(
-      `INSERT INTO ordenes (id, usuario_id, total_clp, estado, region_envio, comuna_envio, direccion, creado_en)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       RETURNING *`,
-      [ordenId, userId, totalClp, "pendiente", region_envio, comuna_envio, direccion, new Date()]
+      `INSERT INTO ordenes (usuario_id, total_clp, estado, region_envio, comuna_envio, direccion, creado_en)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING id`,
+      [userId, totalClp, "pendiente", region_envio, comuna_envio, direccion, new Date()]
     );
+
+    const ordenId = ordenResult.rows[0].id;
 
     // Procesar items y deducir stock
     for (const item of itemsResult.rows) {
       await pool.query(
-        `INSERT INTO items_orden (id, orden_id, tipo_item, variante_producto_id, publicacion_id, cantidad, precio_snapshot_clp)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [Date.now(), ordenId, item.tipo_item, item.variante_producto_id || null, item.publicacion_id || null, item.cantidad, item.precio]
+        `INSERT INTO items_orden (orden_id, tipo_item, variante_producto_id, publicacion_id, cantidad, precio_snapshot_clp)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [ordenId, item.tipo_item, item.variante_producto_id || null, item.publicacion_id || null, item.cantidad, item.precio]
       );
 
       // Deducir stock para publicaciones
