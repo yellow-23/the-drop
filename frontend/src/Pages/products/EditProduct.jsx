@@ -5,6 +5,7 @@ import brandService from "../../services/brandService";
 import sizeService from "../../services/sizeService";
 import { useAuth } from "../../Context/AuthContext";
 import { useNotification } from "../../Context/NotificationContext";
+import "./EditProduct.css";
 import "./CreateProduct.css";
 import Footer from "../../Components/layout/Footer";
 
